@@ -1,3 +1,8 @@
+<style>
+p {
+  margin: 0;
+}
+</style>
 <h1>Hello, Rails!</h1>
 <input id="search"/>
 <div id="chartResults"></div>
@@ -26,21 +31,50 @@ async function search(query, path) {
   return response.json();
 }
 function displayChartResults(chartResults) {
-  const newChartElements = chartResults.map((chart) => {
-    const div = document.createElement('div');
-    div.class = 'chart';
-    div.innerText = JSON.stringify(chart);
-    return div;
-  })
+  const newChartElements = chartResults.map((chart) => createChartElement(chart));
   document.querySelector('#chartResults').replaceChildren(newChartElements);
 }
+function createChartElement(chart) {
+  return htmlToElement(`
+    <div class="chart">
+      ${chart.id}
+    </div>
+  `);
+}
 function displaySongResults(songResults) {
-  const newSongElements = songResults.map((song) => {
-    const div = document.createElement('div');
-    div.class = 'song';
-    div.innerText = JSON.stringify(song);
-    return div;
-  })
+  const newSongElements = songResults.map((song) => createSongElement(song));
   document.querySelector('#songResults').replaceChildren(...newSongElements);
+}
+function createSongElement(song) {
+  const chartDiffs = [];
+  if (song.easy_diff) {
+    chartDiffs.push(`E ${song.easy_diff}`);
+  }
+  if (song.normal_diff) {
+    chartDiffs.push(`N ${song.normal_diff}`);
+  }
+  if (song.hyper_diff) {
+    chartDiffs.push(`H ${song.hyper_diff}`);
+  }
+  if (song.ex_diff) {
+    chartDiffs.push(`EX ${song.ex_diff}`);
+  }
+
+  return htmlToElement(`
+    <div class="song">
+      <img src="https://popn-assets.surge.sh/kc_${song.id.toString().padStart(4, '0')}.png">
+      <div class="info" style="display: inline-block">
+        <p><a href="https://remywiki.com/${song.remywiki_url_path}">${song.remywiki_title}</a></p>
+        <p>${chartDiffs.join(' / ')}</p>
+      </div>
+    </div>
+  `);
+}
+// https://stackoverflow.com/a/35385518
+function htmlToElement(html) {
+  var template = document.createElement('template');
+  html = html.trim(); // Never return a text node of whitespace as the result
+  template.innerHTML = html;
+  return template.content.firstChild;
 }
 </script>
