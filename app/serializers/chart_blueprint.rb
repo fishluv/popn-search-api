@@ -4,6 +4,10 @@ class ChartBlueprint < Blueprinter::Base
   field :level
   field :has_holds
 
+  field :song_id do |chart|
+    chart.song.id
+  end
+
   field :artist do |chart|
     chart.song.artist
   end

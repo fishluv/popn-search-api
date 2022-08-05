@@ -25,7 +25,7 @@ class SearchController < ApplicationController
         .where(diff_clause)
         .where(level_clause)
         .limit(50)
-    results = eligible.sort { |a, b| chart_score(b) <=> chart_score(a) }.first(10)
+    results = eligible.sort { |a, b| chart_score(b) <=> chart_score(a) }.first(8)
 
     if params.key?(:debug)
       Rails.logger.info "difficulty: #{@difficulty.inspect}"
@@ -54,7 +54,7 @@ class SearchController < ApplicationController
         {}
       end
     eligible = Song.where(base_eligible_clause).where(diff_level_clause).limit(30)
-    results = eligible.sort { |a, b| song_score(b) <=> song_score(a) }.first(10)
+    results = eligible.sort { |a, b| song_score(b) <=> song_score(a) }.first(8)
 
     if params.key?(:debug)
       Rails.logger.info "difficulty: #{@difficulty.inspect}"

@@ -4,4 +4,8 @@ class SongBlueprint < Blueprinter::Base
   field :genre_romantrans
   field :remywiki_title
   field :remywiki_url_path
+  field :easy_diff
+  field :normal_diff
+  field :hyper_diff
+  field :ex_diff
 end

@@ -2,10 +2,37 @@
 p {
   margin: 0;
 }
+.diff-e {
+  background: rgba(196, 237, 237, 0.95);
+}
+.diff-n {
+  background: rgba(206, 245, 206, 0.95);
+}
+.diff-h {
+  background: rgba(253, 246, 211, 0.95);
+}
+.diff-ex {
+  background: rgba(248, 209, 209, 0.95);
+}
+#search {
+  margin-top: 1rem;
+}
+#chartResults {
+  margin-top: 1rem;
+}
+#songResults {
+  margin-top: 1rem;
+}
+.info {
+  display: inline-block;
+  vertical-align: top;
+}
 </style>
-<h1>Hello, Rails!</h1>
+<h1>Pop'n Music Search</h1>
 <input id="search"/>
+<h2>Chart results</h2>
 <div id="chartResults"></div>
+<h2>Song results</h2>
 <div id="songResults"></div>
 <script>
 document.getElementById('search').addEventListener('keyup', onSearchInputChange);
@@ -14,9 +41,9 @@ async function onSearchInputChange(e) {
   if (val.length < 3) {
     return;
   }
-  // const chartResults = await searchCharts(val);
+  const chartResults = await searchCharts(val);
   const songResults = await searchSongs(val);
-  // displayChartResults(chartResults);
+  displayChartResults(chartResults);
   displaySongResults(songResults);
 }
 async function searchCharts(query) {
@@ -32,12 +59,16 @@ async function search(query, path) {
 }
 function displayChartResults(chartResults) {
   const newChartElements = chartResults.map((chart) => createChartElement(chart));
-  document.querySelector('#chartResults').replaceChildren(newChartElements);
+  document.querySelector('#chartResults').replaceChildren(...newChartElements);
 }
 function createChartElement(chart) {
   return htmlToElement(`
-    <div class="chart">
-      ${chart.id}
+    <div class="chart diff-${chart.difficulty}">
+      <img src="https://popn-assets.surge.sh/kc_${chart.song_id.toString().padStart(4, '0')}.png">
+      <div class="info">
+        <p><a href="https://remywiki.com/${chart.remywiki_url_path}">${chart.remywiki_title}</a></p>
+        <p>${chart.difficulty.toUpperCase()} ${chart.level}</p>
+      </div>
     </div>
   `);
 }
@@ -63,8 +94,9 @@ function createSongElement(song) {
   return htmlToElement(`
     <div class="song">
       <img src="https://popn-assets.surge.sh/kc_${song.id.toString().padStart(4, '0')}.png">
-      <div class="info" style="display: inline-block">
+      <div class="info">
         <p><a href="https://remywiki.com/${song.remywiki_url_path}">${song.remywiki_title}</a></p>
+        <p>Id ${song.id}</p>
         <p>${chartDiffs.join(' / ')}</p>
       </div>
     </div>
