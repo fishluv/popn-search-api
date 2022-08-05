@@ -1,0 +1,46 @@
+<h1>Hello, Rails!</h1>
+<input id="search"/>
+<div id="chartResults"></div>
+<div id="songResults"></div>
+<script>
+document.getElementById('search').addEventListener('keyup', onSearchInputChange);
+async function onSearchInputChange(e) {
+  const val = e.target.value.trim();
+  if (val.length < 3) {
+    return;
+  }
+  // const chartResults = await searchCharts(val);
+  const songResults = await searchSongs(val);
+  // displayChartResults(chartResults);
+  displaySongResults(songResults);
+}
+async function searchCharts(query) {
+  return search(query, '/charts');
+}
+async function searchSongs(query) {
+  return search(query, '/songs');
+}
+async function search(query, path) {
+  const url = path + '?' + new URLSearchParams({ q: query });
+  const response = await fetch(url, { method: 'GET' });
+  return response.json();
+}
+function displayChartResults(chartResults) {
+  const newChartElements = chartResults.map((chart) => {
+    const div = document.createElement('div');
+    div.class = 'chart';
+    div.innerText = JSON.stringify(chart);
+    return div;
+  })
+  document.querySelector('#chartResults').replaceChildren(newChartElements);
+}
+function displaySongResults(songResults) {
+  const newSongElements = songResults.map((song) => {
+    const div = document.createElement('div');
+    div.class = 'song';
+    div.innerText = JSON.stringify(song);
+    return div;
+  })
+  document.querySelector('#songResults').replaceChildren(...newSongElements);
+}
+</script>
