@@ -23,6 +23,8 @@
 #  remywiki_url_path :text
 #
 class Song < ApplicationRecord
+  has_many :charts
+
   def to_s
     display_genre = "[#{genre_romantrans}]" unless remywiki_title == genre_romantrans
     "<Song #{[id, remywiki_title, display_genre, artist].compact.join(' ')}>"
