@@ -8,8 +8,34 @@ class SearchController < ApplicationController
   }.freeze
   PERTINENT_SONG_COLUMNS = PERTINENT_SONG_COLUMNS_AND_WEIGHTS.keys.freeze
 
-  def all
-    songs
+  def charts
+    @raw_query = params[:q].presence&.chomp
+    return render json: [] unless @raw_query
+
+    tokenize_and_normalize
+    parse_difficulty_and_level
+    @token_string = @tokens.join(" ")
+
+    base_eligible_clause = "#{PERTINENT_SONG_COLUMNS.join(" || ' ' || ")} like '%#{@token_string}%'"
+    diff_clause = @difficulty ? { difficulty: @difficulty } : {}
+    level_clause = @level ? { level: @level } : {}
+    eligible =
+      Chart
+        .where(song: Song.where(base_eligible_clause))
+        .where(diff_clause)
+        .where(level_clause)
+        .limit(50)
+    results = eligible.sort { |a, b| chart_score(b) <=> chart_score(a) }.first(10)
+
+    if params.key?(:debug)
+      Rails.logger.info "difficulty: #{@difficulty.inspect}"
+      Rails.logger.info "level: #{@level.inspect}"
+      Rails.logger.info "tokens: #{@tokens}"
+      Rails.logger.info "results:"
+      results.each { |r| Rails.logger.info "  #{chart_score(r)} #{r}" }
+    end
+
+    render json: ChartBlueprint.render(results)
   end
 
   def songs
@@ -18,8 +44,8 @@ class SearchController < ApplicationController
 
     tokenize_and_normalize
     parse_difficulty_and_level
-
     @token_string = @tokens.join(" ")
+
     base_eligible_clause = "#{PERTINENT_SONG_COLUMNS.join(" || ' ' || ")} like '%#{@token_string}%'"
     diff_level_clause =
       if @difficulty && @level
@@ -38,7 +64,7 @@ class SearchController < ApplicationController
       results.each { |r| Rails.logger.info "  #{song_score(r)} #{r}" }
     end
 
-    render json: results
+    render json: SongBlueprint.render(results)
   end
 
   private
@@ -50,12 +76,13 @@ class SearchController < ApplicationController
   def parse_difficulty_and_level
     diff = @tokens.find { |t| %w[e easy n normal h hyper ex].include?(t) }
     lvl = @tokens.find { |t| t.match?(/^\d{1,2}$/) }
-    if diff && lvl
-      @difficulty = @tokens.delete(diff)
-      @level = @tokens.delete(lvl)&.to_i
-    else
-      @difficulty = nil
-      @level = nil
+
+    @difficulty = @tokens.delete(diff) if diff
+
+    lvl_int = lvl&.to_i
+    if (1..50).include?(lvl_int)
+      @tokens.delete(lvl)
+      @level = lvl_int
     end
   end
 
@@ -71,6 +98,31 @@ class SearchController < ApplicationController
       :ex_diff
     else
       nil
+    end
+  end
+
+  def chart_score(chart)
+    score = 0
+    PERTINENT_SONG_COLUMNS_AND_WEIGHTS.each do |col, weight|
+      c = chart.song[col].downcase
+      if @token_string.include?(c) || c.include?(@token_string)
+        score += weight
+      end
+    end
+    score += diff_score(chart.difficulty)
+    score
+  end
+
+  def diff_score(diff)
+    case diff
+    when "ex"
+      0.3
+    when "h"
+      0.2
+    when "n"
+      0.1
+    else
+      0
     end
   end
 
