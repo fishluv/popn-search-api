@@ -13,27 +13,9 @@ class SearchController < ApplicationController
     return render json: [] unless @raw_query
 
     tokenize_and_normalize
-    parse_difficulty_and_level
+    pad_difficulty_and_numbers
     @token_string = @tokens.join(" ")
-
-    base_eligible_clause = "#{PERTINENT_SONG_COLUMNS.join(" || ' ' || ")} like '%#{@token_string}%'"
-    diff_clause = @difficulty ? { difficulty: @difficulty } : {}
-    level_clause = @level ? { level: @level } : {}
-    eligible =
-      Chart
-        .where(song: Song.where(base_eligible_clause))
-        .where(diff_clause)
-        .where(level_clause)
-        .limit(50)
-    results = eligible.sort { |a, b| chart_score(b) <=> chart_score(a) }.first(8)
-
-    if params.key?(:debug)
-      Rails.logger.info "difficulty: #{@difficulty.inspect}"
-      Rails.logger.info "level: #{@level.inspect}"
-      Rails.logger.info "tokens: #{@tokens}"
-      Rails.logger.info "results:"
-      results.each { |r| Rails.logger.info "  #{chart_score(r)} #{r}" }
-    end
+    results = Chart.search(@token_string).limit(50)
 
     render json: ChartBlueprint.render(results)
   end
@@ -72,6 +54,35 @@ class SearchController < ApplicationController
   def tokenize_and_normalize
     @tokens = @raw_query.split(/\s+/).map(&:downcase)
   end
+
+  def pad_difficulty_and_numbers
+    diff = @tokens.find { %w[e n h ex].include?(_1) }
+    if diff
+      @tokens.delete(diff)
+      @tokens << norm_diff(diff).rjust(3, "_")
+    end
+
+    @tokens
+      .select { _1.match?(/^\d{1,2}$/) }
+      .each do |t|
+        @tokens.delete(t)
+        @tokens << t.rjust(3, "_")
+      end
+  end
+
+  def norm_diff(diff)
+    case diff
+    when "e"
+      "easy"
+    when "n"
+      "normal"
+    when "h"
+      "hyper"
+    else
+      diff
+    end
+  end
+
 
   def parse_difficulty_and_level
     diff = @tokens.find { |t| %w[e easy n normal h hyper ex].include?(t) }

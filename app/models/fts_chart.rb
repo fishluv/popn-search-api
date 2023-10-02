@@ -1,0 +1,2 @@
+class FtsChart < ApplicationRecord
+end
