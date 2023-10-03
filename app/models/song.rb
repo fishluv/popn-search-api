@@ -27,10 +27,18 @@ class Song < ApplicationRecord
 
   scope :search, ->(str) do
     str.gsub!(/['"]/, "") # Quotes are impossible to handle in fts5.
+    weights = [
+      0, # id
+      0.5, # id_pad
+      1, # folder
+      1, # title_genre
+      1, # artist
+      1, # extra
+    ]
     self
       .joins("join fts_songs on songs.id = fts_songs.id")
       .where("fts_songs match ?", str)
-      .order(:rank)
+      .order(Arel.sql("bm25(fts_songs, #{weights.join(",")})"))
   end
 
   def to_s
