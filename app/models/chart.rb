@@ -31,6 +31,10 @@ class Chart < ApplicationRecord
       .order(Arel.sql("bm25(fts_charts, #{weights.join(",")})"))
   end
 
+  def labels
+    @labels ||= Label.where(record_type: "chart", record_id: id).pluck(:value)
+  end
+
   def to_s
     "<Chart #{[song.remywiki_title, difficulty, level].compact.join(' ')}>"
   end

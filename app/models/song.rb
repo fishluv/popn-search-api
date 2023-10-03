@@ -34,11 +34,16 @@ class Song < ApplicationRecord
       1, # title_genre
       1, # artist
       1, # extra
+      1, # diffs_levels
     ]
     self
       .joins("join fts_songs on songs.id = fts_songs.id")
       .where("fts_songs match ?", str)
       .order(Arel.sql("bm25(fts_songs, #{weights.join(",")})"))
+  end
+
+  def labels
+    @labels ||= Label.where(record_type: "song", record_id: id).pluck(:value)
   end
 
   def to_s

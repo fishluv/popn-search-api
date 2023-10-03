@@ -20,7 +20,8 @@ Rails.application.config.after_initialize do
         folder,
         title_genre,
         artist,
-        extra
+        extra,
+        diffs_levels
       )
     SQL
   )
@@ -52,7 +53,8 @@ Rails.application.config.after_initialize do
       pad(norm_folder(song.folder)),
       pad(norm_title_genre(song)),
       pad(song.artist),
-      "",
+      song.labels.join(" "),
+      song.charts.map { "#{norm_diff(_1.difficulty)} #{_1.level}" }.join(" "),
     ]
     ApplicationRecord.connection.execute(
       <<~SQL
@@ -62,7 +64,8 @@ Rails.application.config.after_initialize do
           folder,
           title_genre,
           artist,
-          extra
+          extra,
+          diffs_levels
         ) values (
           #{values.map { ApplicationRecord.connection.quote _1 }.join ", "}
         )
@@ -76,7 +79,7 @@ Rails.application.config.after_initialize do
         pad(norm_folder(song.folder)),
         pad(norm_title_genre(song)),
         pad(song.artist),
-        "",
+        chart.labels.join(" "),
         pad(norm_diff(chart.difficulty)),
         pad(chart.level),
       ]
