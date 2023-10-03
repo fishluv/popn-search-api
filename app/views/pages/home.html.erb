@@ -35,7 +35,15 @@ p {
 <h2>Song results</h2>
 <div id="songResults"></div>
 <script>
-document.getElementById('search').addEventListener('keyup', onSearchInputChange);
+document.getElementById('search').addEventListener('keyup', debounce(onSearchInputChange));
+// https://www.freecodecamp.org/news/javascript-debounce-example/
+function debounce(func){
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => { func.apply(this, args); }, 125);
+  };
+}
 async function onSearchInputChange(e) {
   const val = e.target.value.trim();
   if (val.length < 3) {
