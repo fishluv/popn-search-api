@@ -45,7 +45,7 @@ namespace :fts do
   desc "Setup virtual tables"
   task setup: [:init] do
     log "inserting song and chart data"
-    # Song.first(50).each_with_index do |song, idx|
+    # Song.first(500).each_with_index do |song, idx|
     Song.find_each.with_index do |song, idx|
       log "song #{idx}/#{Song.count} ..." if idx > 0 && idx % 100 == 0
 
@@ -74,8 +74,8 @@ namespace :fts do
         SQL
       )
 
-      song.charts.each do |chart|
-        values = [
+      valueses = song.charts.map do |chart|
+        csv = [
           chart.id, # Don't pad this. For joining, not searching.
           pad(song.id),
           pad(norm_folder(song.folder)),
@@ -85,23 +85,24 @@ namespace :fts do
           pad(norm_diff(chart.difficulty)),
           pad(chart.level),
         ]
-        ApplicationRecord.connection.execute(
-          <<~SQL
-            insert into fts_charts (
-              id,
-              song_id,
-              folder,
-              title_genre,
-              artist,
-              extra,
-              difficulty,
-              level
-            ) values (
-              #{values.map { ApplicationRecord.connection.quote _1 }.join ", "}
-            )
-          SQL
-        )
-      end
+          .map { ApplicationRecord.connection.quote _1 }
+          .join(", ")
+        "(#{csv})"
+      end.join(",")
+      ApplicationRecord.connection.execute(
+        <<~SQL
+          insert into fts_charts (
+            id,
+            song_id,
+            folder,
+            title_genre,
+            artist,
+            extra,
+            difficulty,
+            level
+          ) values #{valueses}
+        SQL
+      )
     end
 
     log "done"
