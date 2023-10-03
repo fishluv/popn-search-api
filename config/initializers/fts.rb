@@ -21,13 +21,14 @@ Rails.application.config.after_initialize do
         artist,
         extra,
         difficulty,
-        level,
-        tokenize="trigram"
+        level
       )
     SQL
   )
+  # trigram tokenizer isn't shipped with Render's sqlite.
   
   log "insert chart data"
+  # Song.first(50).each_with_index do |song, idx|
   Song.find_each.with_index do |song, idx|
     log "song #{idx}/#{Song.count} ..." if idx > 0 && idx % 100 == 0
 
@@ -76,6 +77,7 @@ def norm_title_genre(song)
     song.genre_romantrans,
   ]
     .map(&:downcase)
+    .map { _1.gsub(/['"]/, "") } # Quotes are impossible to handle in fts5.
     .uniq
     .join(" ")
 end

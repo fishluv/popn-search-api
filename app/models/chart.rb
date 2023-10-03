@@ -14,6 +14,7 @@ class Chart < ApplicationRecord
   belongs_to :hyrorre_chart, foreign_key: "hyrorre_page_path"
 
   scope :search, ->(str) do
+    str.gsub!(/['"]/, "") # Quotes are impossible to handle in fts5.
     self
       .joins("join fts_charts on charts.id = fts_charts.id")
       .where("fts_charts match ?", str)
