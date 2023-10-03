@@ -1,0 +1,2 @@
+class FtsSong < ApplicationRecord
+end

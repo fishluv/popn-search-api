@@ -6,10 +6,24 @@ Rails.application.config.after_initialize do
     next
   end
 
-  log "drop existing table"
+  log "drop existing tables"
+  ApplicationRecord.connection.execute("drop table if exists fts_songs")
   ApplicationRecord.connection.execute("drop table if exists fts_charts")
 
-  log "create new table"
+  log "create new tables"
+  ApplicationRecord.connection.execute(
+    <<~SQL
+      create virtual table fts_songs
+      using fts5(
+        id,
+        id_pad,
+        folder,
+        title_genre,
+        artist,
+        extra
+      )
+    SQL
+  )
   ApplicationRecord.connection.execute(
     <<~SQL
       create virtual table fts_charts
@@ -26,7 +40,36 @@ Rails.application.config.after_initialize do
     SQL
   )
   # trigram tokenizer isn't shipped with Render's sqlite.
-  
+
+  log "insert song data"
+  # Song.first(50).each_with_index do |song, idx|
+  Song.find_each.with_index do |song, idx|
+    log "song #{idx}/#{Song.count} ..." if idx > 0 && idx % 100 == 0
+
+    values = [
+      song.id, # Don't pad this. For joining, not searching.
+      pad(song.id),
+      pad(norm_folder(song.folder)),
+      pad(norm_title_genre(song)),
+      pad(song.artist),
+      "",
+    ]
+    ApplicationRecord.connection.execute(
+      <<~SQL
+        insert into fts_songs (
+          id,
+          id_pad,
+          folder,
+          title_genre,
+          artist,
+          extra
+        ) values (
+          #{values.map { ApplicationRecord.connection.quote _1 }.join ", "}
+        )
+      SQL
+    )
+  end
+
   log "insert chart data"
   # Song.first(50).each_with_index do |song, idx|
   Song.find_each.with_index do |song, idx|

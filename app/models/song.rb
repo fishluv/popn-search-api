@@ -25,6 +25,14 @@
 class Song < ApplicationRecord
   has_many :charts
 
+  scope :search, ->(str) do
+    str.gsub!(/['"]/, "") # Quotes are impossible to handle in fts5.
+    self
+      .joins("join fts_songs on songs.id = fts_songs.id")
+      .where("fts_songs match ?", str)
+      .order(:rank)
+  end
+
   def to_s
     display_genre = "[#{genre_romantrans}]" unless remywiki_title == genre_romantrans
     "<Song #{[id, remywiki_title, display_genre, artist].compact.join(' ')}>"
