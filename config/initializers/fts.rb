@@ -41,7 +41,7 @@ Rails.application.config.after_initialize do
   )
   # trigram tokenizer isn't shipped with Render's sqlite.
 
-  log "insert song data"
+  log "insert song and chart data"
   # Song.first(50).each_with_index do |song, idx|
   Song.find_each.with_index do |song, idx|
     log "song #{idx}/#{Song.count} ..." if idx > 0 && idx % 100 == 0
@@ -68,12 +68,6 @@ Rails.application.config.after_initialize do
         )
       SQL
     )
-  end
-
-  log "insert chart data"
-  # Song.first(50).each_with_index do |song, idx|
-  Song.find_each.with_index do |song, idx|
-    log "song #{idx}/#{Song.count} ..." if idx > 0 && idx % 100 == 0
 
     song.charts.each do |chart|
       values = [
