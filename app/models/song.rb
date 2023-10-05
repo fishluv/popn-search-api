@@ -26,7 +26,7 @@ class Song < ApplicationRecord
   has_many :charts
 
   scope :search, ->(str) do
-    str.gsub!(/['"]/, "") # Quotes are impossible to handle in fts5.
+    str.gsub!("'", "''") # Need to x2 single quotes for FTS5.
     weights = [
       0, # id
       0.5, # id_pad
@@ -38,7 +38,9 @@ class Song < ApplicationRecord
     ]
     self
       .joins("join fts_songs on songs.id = fts_songs.id")
-      .where("fts_songs match ?", str)
+      # https://stackoverflow.com/a/43756146
+      # Manual quoting is necessary for FTS5.
+      .where("fts_songs match '\"#{str}\"'")
       .order(Arel.sql("bm25(fts_songs, #{weights.join(",")})"))
   end
 

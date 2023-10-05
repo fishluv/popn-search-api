@@ -121,7 +121,6 @@ def norm_title_genre(song)
     song.genre_romantrans,
   ]
     .map(&:downcase)
-    .map { _1.gsub(/['"]/, "") } # Quotes are impossible to handle in fts5.
     .uniq
     .join(" ")
 end
