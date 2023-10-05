@@ -13,8 +13,7 @@ class Chart < ApplicationRecord
   belongs_to :song
   belongs_to :hyrorre_chart, foreign_key: "hyrorre_page_path"
 
-  scope :search, ->(str) do
-    str.gsub!("'", "''") # Need to x2 single quotes for FTS5.
+  scope :search, ->(query) do
     weights = [
       0, # id
       0.5, # song_id
@@ -27,9 +26,7 @@ class Chart < ApplicationRecord
     ]
     self
       .joins("join fts_charts on charts.id = fts_charts.id")
-      # https://stackoverflow.com/a/43756146
-      # Manual quoting is necessary for FTS5.
-      .where("fts_charts match '\"#{str}\"'")
+      .where("fts_charts match #{Fts.match_string(query)}")
       .order(Arel.sql("bm25(fts_charts, #{weights.join(",")})"))
   end
 
