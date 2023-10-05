@@ -31,7 +31,7 @@ class Song < ApplicationRecord
       0.5, # id_pad
       1, # folder
       1, # title_genre
-      1, # artist
+      0.75, # artist
       1, # extra
       1, # diffs_levels
     ]

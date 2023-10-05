@@ -19,7 +19,7 @@ class Chart < ApplicationRecord
       0.5, # song_id
       1, # folder
       1, # title_genre
-      1, # artist
+      0.5, # artist
       1, # extra
       1, # difficulty
       1, # level
