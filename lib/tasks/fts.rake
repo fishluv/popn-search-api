@@ -81,7 +81,7 @@ namespace :fts do
           pad(norm_folder(song.folder)),
           pad(norm_title_genre(song)),
           pad(song.artist),
-          chart.labels.join(" "),
+          (song.labels + chart.labels).join(" "),
           pad(norm_diff(chart.difficulty)),
           pad(chart.level),
         ]
