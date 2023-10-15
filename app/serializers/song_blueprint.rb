@@ -8,4 +8,5 @@ class SongBlueprint < Blueprinter::Base
   field :normal_diff
   field :hyper_diff
   field :ex_diff
+  field :folder
 end
