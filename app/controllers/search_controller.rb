@@ -3,10 +3,15 @@ class SearchController < ApplicationController
     @raw_query = params[:q].presence&.chomp
     return render json: [] unless @raw_query
 
+    limit = params[:limit].to_i
+    if limit == 0
+      limit = 50
+    end
+
     tokenize_and_normalize
     pad_difficulty_and_numbers
     token_string = @tokens.join(" ")
-    results = Chart.search(token_string).limit(50)
+    results = Chart.search(token_string).limit(limit)
 
     render json: ChartBlueprint.render(results)
   end
@@ -15,10 +20,15 @@ class SearchController < ApplicationController
     @raw_query = params[:q].presence&.chomp
     return render json: [] unless @raw_query
 
+    limit = params[:limit].to_i
+    if limit == 0
+      limit = 50
+    end
+
     tokenize_and_normalize
     pad_difficulty_and_numbers
     token_string = @tokens.join(" ")
-    results = Song.search(token_string).limit(50)
+    results = Song.search(token_string).limit(limit)
 
     render json: SongBlueprint.render(results)
   end
