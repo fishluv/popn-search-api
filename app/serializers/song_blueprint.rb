@@ -14,6 +14,7 @@ class SongBlueprint < Blueprinter::Base
     :remywiki_url_path,
     :remywiki_title,
     :genre_romantrans,
+    :labels,
   )
 
   field :title_sort_char do |song|
