@@ -1,27 +1,18 @@
 class ChartBlueprint < Blueprinter::Base
   identifier :id
-  field :difficulty
-  field :level
-  field :has_holds
 
-  field :song_id do |chart|
-    chart.song.id
+  fields *%i[
+    difficulty
+    level
+    labels
+  ]
+
+  field :song do |chart|
+    SongBlueprint.render_as_hash(chart.song)
   end
 
-  field :artist do |chart|
-    chart.song.artist
-  end
-
-  field :genre_romantrans do |chart|
-    chart.song.genre_romantrans
-  end
-
-  field :remywiki_title do |chart|
-    chart.song.remywiki_title
-  end
-
-  field :remywiki_url_path do |chart|
-    chart.song.remywiki_url_path
+  field :has_holds do |chart|
+    chart.has_holds == 1
   end
 
   field :category do |chart|

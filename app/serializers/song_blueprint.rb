@@ -1,21 +1,21 @@
 class SongBlueprint < Blueprinter::Base
   identifier :id
 
-  fields(
-    :title,
-    :genre,
-    :artist,
-    :easy_diff,
-    :normal_diff,
-    :hyper_diff,
-    :ex_diff,
-    :folder,
-    :slug,
-    :remywiki_url_path,
-    :remywiki_title,
-    :genre_romantrans,
-    :labels,
-  )
+  fields *%i[
+    title
+    remywiki_title
+    genre
+    genre_romantrans
+    artist
+    easy_diff
+    normal_diff
+    hyper_diff
+    ex_diff
+    folder
+    slug
+    remywiki_url_path
+    labels
+  ]
 
   field :title_sort_char do |song|
     song.fw_title[0]
