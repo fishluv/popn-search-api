@@ -4,6 +4,7 @@ class ChartBlueprint < Blueprinter::Base
   fields *%i[
     difficulty
     level
+    hyrorre_page_path
     labels
   ]
 
