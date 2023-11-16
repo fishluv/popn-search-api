@@ -21,7 +21,7 @@ ActiveRecord::Base.establish_connection(
 )
 ```
 
-Then do
+Then do:
 
 ```sh
 bundle exec annotaterb models

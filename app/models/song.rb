@@ -41,7 +41,7 @@ class Song < ApplicationRecord
       1, # extra
       1, # diffs_levels
       1, # chara_disp_name
-      1, # chara_romantrans_name
+      0.75, # chara_romantrans_name
     ]
     self
       .joins("join fts_songs on songs.id = fts_songs.id")
