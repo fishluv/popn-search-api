@@ -40,11 +40,17 @@ class Song < ApplicationRecord
       0.75, # artist
       1, # extra
       1, # diffs_levels
+      1, # chara_disp_name
+      1, # chara_romantrans_name
     ]
     self
       .joins("join fts_songs on songs.id = fts_songs.id")
       .where("fts_songs match #{Fts.match_string(query)}")
       .order(Arel.sql("bm25(fts_songs, #{weights.join(",")})"))
+  end
+
+  def character
+    @character ||= Character.find_by(chara_id: chara1)
   end
 
   def labels

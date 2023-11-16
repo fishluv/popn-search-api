@@ -49,7 +49,7 @@ namespace :fts do
   desc "Setup virtual tables"
   task setup: [:init] do
     log "inserting song and chart data"
-    # Song.first(500).each_with_index do |song, idx|
+    # Song.first(5).each_with_index do |song, idx|
     Song.find_each.with_index do |song, idx|
       log "song #{idx}/#{Song.count} ..." if idx > 0 && idx % 100 == 0
 
@@ -58,9 +58,11 @@ namespace :fts do
         pad(song.id),
         pad(norm_folder(song.folder)),
         pad(norm_title_genre(song)),
-        pad(song.artist),
+        pad(song.artist.downcase),
         song.labels.join(" "),
         song.charts.map { "#{norm_diff(_1.difficulty)} #{_1.level}" }.join(" "),
+        song.character.disp_name,
+        song.character.romantrans_name&.downcase || "",
       ]
       ApplicationRecord.connection.execute(
         <<~SQL
@@ -71,7 +73,9 @@ namespace :fts do
             title_genre,
             artist,
             extra,
-            diffs_levels
+            diffs_levels,
+            chara_disp_name,
+            chara_romantrans_name
           ) values (
             #{values.map { ApplicationRecord.connection.quote _1 }.join ", "}
           )
@@ -84,10 +88,12 @@ namespace :fts do
           pad(song.id),
           pad(norm_folder(song.folder)),
           pad(norm_title_genre(song)),
-          pad(song.artist),
+          pad(song.artist.downcase),
           (song.labels + chart.labels).join(" "),
           pad(norm_diff(chart.difficulty)),
           pad(chart.level),
+          pad(song.character.disp_name),
+          song.character.romantrans_name&.downcase || "",
         ]
           .map { ApplicationRecord.connection.quote _1 }
           .join(", ")
@@ -103,7 +109,9 @@ namespace :fts do
             artist,
             extra,
             difficulty,
-            level
+            level,
+            chara_disp_name,
+            chara_romantrans_name
           ) values #{valueses}
         SQL
       )
