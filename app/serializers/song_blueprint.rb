@@ -24,4 +24,8 @@ class SongBlueprint < Blueprinter::Base
   field :genre_sort_char do |song|
     song.fw_genre[0]
   end
+
+  field :character do |song|
+    CharacterBlueprint.render_as_hash(song.character)
+  end
 end

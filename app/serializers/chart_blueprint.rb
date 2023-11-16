@@ -12,6 +12,10 @@ class ChartBlueprint < Blueprinter::Base
     SongBlueprint.render_as_hash(chart.song)
   end
 
+  field :character do |chart|
+    CharacterBlueprint.render_as_hash(chart.song.character)
+  end
+
   field :has_holds do |chart|
     chart.has_holds == 1
   end
