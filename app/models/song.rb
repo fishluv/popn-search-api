@@ -3,24 +3,30 @@
 # Table name: songs
 #
 #  id                :integer          primary key
-#  fw_genre          :text             not null
-#  fw_title          :text             not null
-#  fw_artist         :text             not null
-#  genre             :text             not null
-#  title             :text             not null
 #  artist            :text             not null
+#  chara1            :text             not null
+#  debut             :text             not null
+#  deleted           :integer          default(0), not null
 #  easy_diff         :integer
 #  easy_hold_flag    :integer
-#  normal_diff       :integer
-#  normal_hold_flag  :integer
-#  hyper_diff        :integer
-#  hyper_hold_flag   :integer
 #  ex_diff           :integer
 #  ex_hold_flag      :integer
-#  deleted           :integer          default(0)
+#  folder            :text             not null
+#  fw_artist         :text             not null
+#  fw_genre          :text             not null
+#  fw_title          :text             not null
+#  genre             :text             not null
 #  genre_romantrans  :text
+#  genre_sort_char   :text             not null
+#  hyper_diff        :integer
+#  hyper_hold_flag   :integer
+#  normal_diff       :integer
+#  normal_hold_flag  :integer
 #  remywiki_title    :text
 #  remywiki_url_path :text
+#  slug              :text
+#  title             :text             not null
+#  title_sort_char   :text             not null
 #
 class Song < ApplicationRecord
   has_many :charts

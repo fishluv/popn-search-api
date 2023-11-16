@@ -20,7 +20,9 @@ namespace :fts do
           title_genre,
           artist,
           extra,
-          diffs_levels
+          diffs_levels,
+          chara_disp_name,
+          chara_romantrans_name
         )
       SQL
     )
@@ -35,7 +37,9 @@ namespace :fts do
           artist,
           extra,
           difficulty,
-          level
+          level,
+          chara_disp_name,
+          chara_romantrans_name
         )
       SQL
     )

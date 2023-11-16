@@ -2,12 +2,17 @@
 #
 # Table name: charts
 #
-#  id                :text             primary key
-#  difficulty        :text             not null
-#  level             :integer          not null
-#  has_holds         :integer          not null
-#  song_id           :integer          not null
-#  hyrorre_page_path :text
+#  id               :text             primary key
+#  difficulty       :text             not null
+#  has_holds        :integer          not null
+#  jkwiki_page_path :text
+#  level            :integer          not null
+#  song_id          :integer          not null
+#
+# Foreign Keys
+#
+#  jkwiki_page_path  (jkwiki_page_path => jkwiki_charts.page_path)
+#  song_id           (song_id => songs.id)
 #
 class Chart < ApplicationRecord
   belongs_to :song
