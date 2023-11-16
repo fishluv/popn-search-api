@@ -4,7 +4,7 @@ class ChartBlueprint < Blueprinter::Base
   fields *%i[
     difficulty
     level
-    hyrorre_page_path
+    jkwiki_page_path
     labels
   ]
 
@@ -17,26 +17,26 @@ class ChartBlueprint < Blueprinter::Base
   end
 
   field :category do |chart|
-    chart.hyrorre_chart&.category
+    chart.jkwiki_chart&.category
   end
 
   field :bpm do |chart|
-    chart.hyrorre_chart&.bpm
+    chart.jkwiki_chart&.bpm
   end
 
   field :duration do |chart|
-    chart.hyrorre_chart&.duration
+    chart.jkwiki_chart&.duration
   end
 
   field :notes do |chart|
-    chart.hyrorre_chart&.notes
+    chart.jkwiki_chart&.notes
   end
 
   field :rating do |chart|
-    chart.hyrorre_chart&.rating
+    chart.jkwiki_chart&.rating
   end
 
   field :sran_level do |chart|
-    chart.hyrorre_chart&.sran_level
+    chart.jkwiki_chart&.sran_level
   end
 end

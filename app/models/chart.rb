@@ -16,7 +16,7 @@
 #
 class Chart < ApplicationRecord
   belongs_to :song
-  belongs_to :hyrorre_chart, foreign_key: "hyrorre_page_path"
+  belongs_to :jkwiki_chart, foreign_key: "jkwiki_page_path"
 
   scope :search, ->(query) do
     weights = [
