@@ -6,9 +6,6 @@ class CharacterBlueprint < Blueprinter::Base
     icon1
     disp_name
     romantrans_name
+    sort_char
   ]
-
-  field :sort_char do |character|
-    character.sort_name[0]
-  end
 end
