@@ -4,6 +4,7 @@ class CharacterBlueprint < Blueprinter::Base
   fields *%i[
     chara_id
     icon1
+    sort_name
     disp_name
     romantrans_name
     sort_char
