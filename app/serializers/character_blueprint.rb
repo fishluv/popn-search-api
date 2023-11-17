@@ -7,6 +7,5 @@ class CharacterBlueprint < Blueprinter::Base
     sort_name
     disp_name
     romantrans_name
-    sort_char
   ]
 end
