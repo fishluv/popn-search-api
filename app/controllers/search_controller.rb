@@ -4,9 +4,8 @@ class SearchController < ApplicationController
     return render json: [] unless @raw_query
 
     limit = params[:limit].to_i
-    if limit == 0
-      limit = 50
-    end
+    limit = 10 if limit == 0
+    limit = 25 if limit > 25
 
     tokenize_and_normalize
     pad_difficulty_and_numbers
@@ -25,9 +24,8 @@ class SearchController < ApplicationController
     return render json: [] unless @raw_query
 
     limit = params[:limit].to_i
-    if limit == 0
-      limit = 50
-    end
+    limit = 10 if limit == 0
+    limit = 25 if limit > 25
 
     tokenize_and_normalize
     pad_difficulty_and_numbers
