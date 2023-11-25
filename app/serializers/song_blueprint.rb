@@ -28,4 +28,20 @@ class SongBlueprint < Blueprinter::Base
   field :character do |song|
     CharacterBlueprint.render_as_hash(song.character)
   end
+
+  field :easy_chart_id do |song|
+    "#{song.id}e" if song.easy_diff
+  end
+
+  field :normal_chart_id do |song|
+    "#{song.id}n" if song.normal_diff
+  end
+
+  field :hyper_chart_id do |song|
+    "#{song.id}h" if song.hyper_diff
+  end
+
+  field :ex_chart_id do |song|
+    "#{song.id}ex" if song.ex_diff
+  end
 end
