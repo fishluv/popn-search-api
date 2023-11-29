@@ -125,18 +125,6 @@ def pad(x)
   x.to_s.rjust(3, "_")
 end
 
-def norm_title_genre(song)
-  [
-    song.title,
-    song.remywiki_title,
-    song.genre,
-    song.genre_romantrans,
-  ]
-    .map(&:downcase)
-    .uniq
-    .join(" ")
-end
-
 def norm_folder(folder)
   case folder
   when "27"
@@ -174,6 +162,18 @@ def norm_folder(folder)
   else
     folder
   end
+end
+
+def norm_title_genre(song)
+  [
+    song.title,
+    song.remywiki_title,
+    song.genre,
+    song.genre_romantrans,
+  ]
+    .map(&:downcase)
+    .uniq
+    .join(" ")
 end
 
 def norm_diff(diff)
