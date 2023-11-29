@@ -58,7 +58,7 @@ namespace :fts do
         pad(song.id),
         pad(norm_folder(song.folder)),
         pad(norm_title_genre(song)),
-        pad(song.artist.downcase),
+        pad(norm_artist(song.artist)),
         song.labels.join(" "),
         song.charts.map { "#{norm_diff(_1.difficulty)} #{_1.level}" }.join(" "),
         song.character.disp_name,
@@ -88,7 +88,7 @@ namespace :fts do
           pad(song.id),
           pad(norm_folder(song.folder)),
           pad(norm_title_genre(song)),
-          pad(song.artist.downcase),
+          pad(norm_artist(song.artist)),
           (song.labels + chart.labels).join(" "),
           pad(norm_diff(chart.difficulty)),
           pad(chart.level),
@@ -174,6 +174,19 @@ def norm_title_genre(song)
     .map(&:downcase)
     .uniq
     .join(" ")
+end
+
+ARTIST_ALIASES_AND_RELATED_NAMES = {
+  "日向美ビタースイーツ" => %w[hinabitter hinabita],
+  "ここなつ" => %w[hinabitter hinabita coconatsu],
+}.freeze
+
+def norm_artist(artist)
+  all_names = [artist]
+  ARTIST_ALIASES_AND_RELATED_NAMES.each do |aliaz, related_names|
+    all_names += related_names if artist.include?(aliaz)
+  end
+  all_names.map(&:downcase).join(" ")
 end
 
 def norm_diff(diff)
