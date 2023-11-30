@@ -177,16 +177,29 @@ def norm_title_genre(song)
 end
 
 ARTIST_ALIASES_AND_RELATED_NAMES = {
-  "日向美ビタースイーツ" => %w[hinabitter hinabita],
-  "ここなつ" => %w[hinabitter hinabita coconatsu],
+  [/日向美ビタースイーツ/] => %w[hinabitter hinabita],
+  [/ここなつ/] => %w[hinabitter hinabita coconatsu],
+  [
+    /Power Of Nature/,
+    /Mystic Moon/,
+    /Zutt/,
+  ] => %w[pon],
+  [/GeMiNioИ/] => %w[pon akhuta],
+  [
+    /^colors$/,
+    /Cuvelia/,
+    /Risk Junk/,
+    /South Carolina Duzzle/,
+  ] => ["dj taka"],
+  [/iconoclasm/] => ["dj taka", "wac"],
 }.freeze
 
 def norm_artist(artist)
   all_names = [artist]
-  ARTIST_ALIASES_AND_RELATED_NAMES.each do |aliaz, related_names|
-    all_names += related_names if artist.include?(aliaz)
+  ARTIST_ALIASES_AND_RELATED_NAMES.each do |aliases, related_names|
+    all_names += related_names if aliases.any? { _1.match?(artist) }
   end
-  all_names.map(&:downcase).join(" ")
+  all_names.map(&:downcase).uniq.join(" ")
 end
 
 def norm_diff(diff)
