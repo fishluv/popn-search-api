@@ -26,7 +26,12 @@ class SongBlueprint < Blueprinter::Base
     song.fw_genre[0]
   end
 
+  # TODO: Delete
   field :character do |song|
+    CharacterBlueprint.render_as_hash(song.character1)
+  end
+
+  field :character1 do |song|
     CharacterBlueprint.render_as_hash(song.character1)
   end
 

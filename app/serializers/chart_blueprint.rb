@@ -12,7 +12,12 @@ class ChartBlueprint < Blueprinter::Base
     SongBlueprint.render_as_hash(chart.song)
   end
 
+  # TODO: delete
   field :character do |chart|
+    CharacterBlueprint.render_as_hash(chart.song.character1)
+  end
+
+  field :character1 do |chart|
     CharacterBlueprint.render_as_hash(chart.song.character1)
   end
 
