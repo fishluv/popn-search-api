@@ -13,7 +13,7 @@ class ChartBlueprint < Blueprinter::Base
   end
 
   field :character do |chart|
-    CharacterBlueprint.render_as_hash(chart.song.character)
+    CharacterBlueprint.render_as_hash(chart.song.character1)
   end
 
   field :has_holds do |chart|

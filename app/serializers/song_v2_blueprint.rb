@@ -36,7 +36,7 @@ class SongV2Blueprint < Blueprinter::Base
     end
 
     field :character do |song|
-      CharacterBlueprint.render_as_hash(song.character)
+      CharacterBlueprint.render_as_hash(song.character1)
     end
 
     field :easyChartId do |song|

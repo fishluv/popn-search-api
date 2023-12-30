@@ -14,6 +14,7 @@ class SongBlueprint < Blueprinter::Base
     folder
     slug
     remywiki_url_path
+    remywiki_chara
     labels
   ]
 
@@ -26,7 +27,7 @@ class SongBlueprint < Blueprinter::Base
   end
 
   field :character do |song|
-    CharacterBlueprint.render_as_hash(song.character)
+    CharacterBlueprint.render_as_hash(song.character1)
   end
 
   field :easy_chart_id do |song|

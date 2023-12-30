@@ -28,8 +28,8 @@ class Chart < ApplicationRecord
       1, # extra
       1, # difficulty
       1, # level
-      1, # chara_disp_name
-      0.75, # chara_romantrans_name
+      1, # chara1_disp_name
+      0.75, # charas_romantrans
     ]
     self
       .joins("join fts_charts on charts.id = fts_charts.id")

@@ -22,6 +22,7 @@
 #  hyper_hold_flag   :integer
 #  normal_diff       :integer
 #  normal_hold_flag  :integer
+#  remywiki_chara    :text
 #  remywiki_title    :text
 #  remywiki_url_path :text
 #  slug              :text
@@ -40,8 +41,8 @@ class Song < ApplicationRecord
       0.75, # artist
       1, # extra
       1, # diffs_levels
-      1, # chara_disp_name
-      0.75, # chara_romantrans_name
+      1, # chara1_disp_name
+      0.75, # charas_romantrans
     ]
     self
       .joins("join fts_songs on songs.id = fts_songs.id")
@@ -49,7 +50,7 @@ class Song < ApplicationRecord
       .order(Arel.sql("bm25(fts_songs, #{weights.join(",")})"))
   end
 
-  def character
+  def character1
     @character ||= Character.find_by(chara_id: chara1)
   end
 
