@@ -62,7 +62,7 @@ namespace :fts do
         song.labels.join(" "),
         song.charts.map { "#{norm_diff(_1.difficulty)} #{_1.level}" }.join(" "),
         song.character1.disp_name,
-        song.remywiki_chara.gsub("/", " ").downcase || "",
+        pad(norm_charas(song.remywiki_chara)),
       ]
       ApplicationRecord.connection.execute(
         <<~SQL
@@ -93,7 +93,7 @@ namespace :fts do
           pad(norm_diff(chart.difficulty)),
           pad(chart.level),
           pad(song.character1.disp_name),
-          song.remywiki_chara.gsub("/", " ").downcase || "",
+          pad(norm_charas(song.remywiki_chara)),
         ]
           .map { ApplicationRecord.connection.quote _1 }
           .join(", ")
@@ -212,6 +212,25 @@ def norm_diff(diff)
     "hyper"
   else
     diff
+  end
+end
+
+CHARA_DISP_NAME_TO_ROMANTRANS = {
+  "六" => "Roku",
+  "どすえ" => "Dosue",
+  "Ｂｉｓ子" => "Bisko",
+  "文彦さん" => "Fumihiko-san",
+  "ピュアクル囿リップ" => "Purecul Lip",
+  "みっちゃん" => "Micchan",
+  "てまり" => "Temari",
+  "小次郎" => "Kojirou",
+}.freeze
+
+def norm_charas(remywiki_chara)
+  if CHARA_DISP_NAME_TO_ROMANTRANS[remywiki_chara]
+    CHARA_DISP_NAME_TO_ROMANTRANS[remywiki_chara]
+  else
+    remywiki_chara.gsub("/", " ").downcase
   end
 end
 
