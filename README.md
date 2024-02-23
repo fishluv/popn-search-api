@@ -2,6 +2,8 @@
 
 ```sh
 bin/rails s
+curl http://localhost:3000/charts?q=cuddle%20core
+curl http://localhost:3000/songs?q=cuddle%20core
 ```
 
 ## Prepare new db
@@ -17,7 +19,7 @@ Copy this at the top of application_record.rb:
 ```rb
 ActiveRecord::Base.establish_connection(
   adapter: "sqlite3",
-  database: "db/2023090500.fts.sqlite3",
+  database: "db/2023121800.fts.sqlite3",
 )
 ```
 
