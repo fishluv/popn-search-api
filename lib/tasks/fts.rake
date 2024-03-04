@@ -61,7 +61,7 @@ namespace :fts do
         pad(norm_artist(song.artist)),
         song.labels.join(" "),
         song.charts.map { "#{norm_diff(_1.difficulty)} #{_1.level}" }.join(" "),
-        song.character1.disp_name,
+        song.character1&.disp_name, # Character _should_ always be present but just in case...
         pad(norm_charas(song.remywiki_chara)),
       ]
       ApplicationRecord.connection.execute(
@@ -92,7 +92,7 @@ namespace :fts do
           (song.labels + chart.labels).join(" "),
           pad(norm_diff(chart.difficulty)),
           pad(chart.level),
-          pad(song.character1.disp_name),
+          pad(song.character1&.disp_name), # Character _should_ always be present but just in case...
           pad(norm_charas(song.remywiki_chara)),
         ]
           .map { ApplicationRecord.connection.quote _1 }
@@ -115,6 +115,9 @@ namespace :fts do
           ) values #{valueses}
         SQL
       )
+    rescue
+      puts song
+      raise
     end
 
     log "done"
@@ -192,6 +195,7 @@ ARTIST_ALIASES_AND_RELATED_NAMES = {
     /South Carolina Duzzle/,
   ] => ["dj taka"],
   [/iconoclasm/] => ["dj taka", "wac"],
+  [/HuΣeR/] => ["humer"],
 }.freeze
 
 def norm_artist(artist)
