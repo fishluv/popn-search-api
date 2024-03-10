@@ -28,11 +28,11 @@ class SongBlueprint < Blueprinter::Base
 
   # TODO: Delete
   field :character do |song|
-    CharacterBlueprint.render_as_hash(song.character1)
+    song.character1.nil? ? nil : CharacterBlueprint.render_as_hash(song.character1)
   end
 
   field :character1 do |song|
-    CharacterBlueprint.render_as_hash(song.character1)
+    song.character1.nil? ? nil : CharacterBlueprint.render_as_hash(song.character1)
   end
 
   field :easy_chart_id do |song|
