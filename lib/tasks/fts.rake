@@ -135,7 +135,16 @@ def pad(x)
 end
 
 def norm_debut(debut)
-  debut.delete_prefix("cs")
+  case debut
+  when "csbest"
+    "best hits"
+  when "cspmp"
+    "portable 1"
+  when "cspmp2"
+    "portable 2"
+  else
+    debut.delete_prefix("cs")
+  end
 end
 
 def norm_folder(folder)
