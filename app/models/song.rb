@@ -11,7 +11,7 @@
 #  easy_hold_flag    :integer
 #  ex_diff           :integer
 #  ex_hold_flag      :integer
-#  folder            :text             not null
+#  folder            :text
 #  fw_artist         :text             not null
 #  fw_genre          :text             not null
 #  fw_title          :text             not null
@@ -36,6 +36,7 @@ class Song < ApplicationRecord
     weights = [
       0, # id
       0.5, # id_pad
+      1, # debut
       1, # folder
       1, # title_genre
       0.75, # artist

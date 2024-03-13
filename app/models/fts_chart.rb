@@ -8,8 +8,9 @@
 #  charas_romantrans :
 #  difficulty        :
 #  extra             :
-#  folder            :
 #  level             :
+#  song_debut        :
+#  song_folder       :
 #  title_genre       :
 #  song_id           :
 #

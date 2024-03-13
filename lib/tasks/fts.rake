@@ -16,6 +16,7 @@ namespace :fts do
         using fts5(
           id,
           id_pad,
+          debut,
           folder,
           title_genre,
           artist,
@@ -32,7 +33,8 @@ namespace :fts do
         using fts5(
           id,
           song_id,
-          folder,
+          song_debut,
+          song_folder,
           title_genre,
           artist,
           extra,
@@ -56,6 +58,7 @@ namespace :fts do
       values = [
         song.id, # Don't pad this. For joining, not searching.
         pad(song.id),
+        pad(norm_debut(song.debut)),
         pad(norm_folder(song.folder)),
         pad(norm_title_genre(song)),
         pad(norm_artist(song.artist)),
@@ -69,6 +72,7 @@ namespace :fts do
           insert into fts_songs (
             id,
             id_pad,
+            debut,
             folder,
             title_genre,
             artist,
@@ -86,6 +90,7 @@ namespace :fts do
         csv = [
           chart.id, # Don't pad this. For joining, not searching.
           pad(song.id),
+          pad(norm_debut(song.debut)),
           pad(norm_folder(song.folder)),
           pad(norm_title_genre(song)),
           pad(norm_artist(song.artist)),
@@ -104,7 +109,8 @@ namespace :fts do
           insert into fts_charts (
             id,
             song_id,
-            folder,
+            song_debut,
+            song_folder,
             title_genre,
             artist,
             extra,
@@ -126,6 +132,10 @@ end
 
 def pad(x)
   x.to_s.rjust(3, "_")
+end
+
+def norm_debut(debut)
+  debut.delete_prefix("cs")
 end
 
 def norm_folder(folder)

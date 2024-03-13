@@ -6,6 +6,7 @@
 #  artist            :
 #  chara1_disp_name  :
 #  charas_romantrans :
+#  debut             :
 #  diffs_levels      :
 #  extra             :
 #  folder            :

@@ -3,28 +3,23 @@ class SongBlueprint < Blueprinter::Base
 
   fields *%i[
     title
+    title_sort_char
     remywiki_title
     genre
+    genre_sort_char
     genre_romantrans
     artist
     easy_diff
     normal_diff
     hyper_diff
     ex_diff
+    debut
     folder
     slug
     remywiki_url_path
     remywiki_chara
     labels
   ]
-
-  field :title_sort_char do |song|
-    song.fw_title[0]
-  end
-
-  field :genre_sort_char do |song|
-    song.fw_genre[0]
-  end
 
   # TODO: Delete
   field :character do |song|

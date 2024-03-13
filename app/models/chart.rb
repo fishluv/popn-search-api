@@ -22,7 +22,8 @@ class Chart < ApplicationRecord
     weights = [
       0, # id
       0.5, # song_id
-      1, # folder
+      1, # song_debut
+      1, # song_folder
       1, # title_genre
       0.5, # artist
       1, # extra
