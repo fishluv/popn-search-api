@@ -1,7 +1,7 @@
 class ChartBlueprint < Blueprinter::Base
   identifier :id
 
-  fields *%i[
+  fields(*%i[
     difficulty
     level
     bpm
@@ -11,7 +11,7 @@ class ChartBlueprint < Blueprinter::Base
     hold_notes
     jkwiki_page_path
     labels
-  ]
+  ])
 
   field :song do |chart|
     SongBlueprint.render_as_hash(chart.song)
