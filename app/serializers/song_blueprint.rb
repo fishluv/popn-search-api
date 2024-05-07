@@ -9,10 +9,6 @@ class SongBlueprint < Blueprinter::Base
     genre_sort_char
     genre_romantrans
     artist
-    easy_diff
-    normal_diff
-    hyper_diff
-    ex_diff
     debut
     folder
     slug
@@ -21,28 +17,27 @@ class SongBlueprint < Blueprinter::Base
     labels
   ]
 
-  # TODO: Delete
-  field :character do |song|
-    song.character1.nil? ? nil : CharacterBlueprint.render_as_hash(song.character1)
+  field :easy_diff do |song|
+    song.charts.find { _1.difficulty == "e" }&.level
+  end
+
+  field :normal_diff do |song|
+    song.charts.find { _1.difficulty == "n" }&.level
+  end
+
+  field :hyper_diff do |song|
+    song.charts.find { _1.difficulty == "h" }&.level
+  end
+
+  field :ex_diff do |song|
+    song.charts.find { _1.difficulty == "ex" }&.level
   end
 
   field :character1 do |song|
     song.character1.nil? ? nil : CharacterBlueprint.render_as_hash(song.character1)
   end
 
-  field :easy_chart_id do |song|
-    "#{song.id}e" if song.easy_diff
-  end
-
-  field :normal_chart_id do |song|
-    "#{song.id}n" if song.normal_diff
-  end
-
-  field :hyper_chart_id do |song|
-    "#{song.id}h" if song.hyper_diff
-  end
-
-  field :ex_chart_id do |song|
-    "#{song.id}ex" if song.ex_diff
+  field :character2 do |song|
+    song.character2.nil? ? nil : CharacterBlueprint.render_as_hash(song.character2)
   end
 end

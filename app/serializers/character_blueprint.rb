@@ -7,9 +7,4 @@ class CharacterBlueprint < Blueprinter::Base
     sort_name
     disp_name
   ]
-
-  # TODO: Delete
-  field :romantrans_name do |character|
-    nil
-  end
 end

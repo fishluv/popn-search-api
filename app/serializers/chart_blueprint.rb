@@ -4,6 +4,11 @@ class ChartBlueprint < Blueprinter::Base
   fields *%i[
     difficulty
     level
+    bpm
+    bpm_steps
+    duration
+    notes
+    hold_notes
     jkwiki_page_path
     labels
   ]
@@ -13,23 +18,7 @@ class ChartBlueprint < Blueprinter::Base
   end
 
   field :has_holds do |chart|
-    chart.has_holds == 1
-  end
-
-  field :category do |chart|
-    chart.jkwiki_chart&.category
-  end
-
-  field :bpm do |chart|
-    chart.jkwiki_chart&.bpm
-  end
-
-  field :duration do |chart|
-    chart.jkwiki_chart&.duration
-  end
-
-  field :notes do |chart|
-    chart.jkwiki_chart&.notes
+    chart.hold_notes > 0
   end
 
   field :rating do |chart|

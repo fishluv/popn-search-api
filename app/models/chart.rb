@@ -2,12 +2,20 @@
 #
 # Table name: charts
 #
-#  id               :text             primary key
-#  difficulty       :text             not null
-#  has_holds        :integer          not null
-#  jkwiki_page_path :text
-#  level            :integer          not null
-#  song_id          :integer          not null
+#  id                     :text             primary key
+#  bpm                    :text
+#  bpm_steps              :text
+#  difficulty             :text             not null
+#  duration               :integer
+#  filename               :text
+#  folder                 :text
+#  force_new_chart_format :integer
+#  has_holds              :integer          not null
+#  hold_notes             :integer
+#  jkwiki_page_path       :text
+#  level                  :integer          not null
+#  notes                  :integer
+#  song_id                :integer          not null
 #
 # Foreign Keys
 #

@@ -23,6 +23,7 @@ namespace :fts do
           extra,
           diffs_levels,
           chara1_disp_name,
+          chara2_disp_name,
           charas_romantrans
         )
       SQL
@@ -41,6 +42,7 @@ namespace :fts do
           difficulty,
           level,
           chara1_disp_name,
+          chara2_disp_name,
           charas_romantrans
         )
       SQL
@@ -65,6 +67,7 @@ namespace :fts do
         song.labels.join(" "),
         song.charts.map { "#{norm_diff(_1.difficulty)} #{_1.level}" }.join(" "),
         song.character1&.disp_name, # Character _should_ always be present but just in case...
+        song.character2&.disp_name, # Character _should_ always be present but just in case...
         pad(norm_charas(song.remywiki_chara)),
       ]
       ApplicationRecord.connection.execute(
@@ -79,6 +82,7 @@ namespace :fts do
             extra,
             diffs_levels,
             chara1_disp_name,
+            chara2_disp_name,
             charas_romantrans
           ) values (
             #{values.map { ApplicationRecord.connection.quote _1 }.join ", "}
@@ -98,6 +102,7 @@ namespace :fts do
           pad(norm_diff(chart.difficulty)),
           pad(chart.level),
           pad(song.character1&.disp_name), # Character _should_ always be present but just in case...
+          pad(song.character2&.disp_name), # Character _should_ always be present but just in case...
           pad(norm_charas(song.remywiki_chara)),
         ]
           .map { ApplicationRecord.connection.quote _1 }
@@ -117,6 +122,7 @@ namespace :fts do
             difficulty,
             level,
             chara1_disp_name,
+            chara2_disp_name,
             charas_romantrans
           ) values #{valueses}
         SQL

@@ -5,12 +5,8 @@
 #  id                :integer          primary key
 #  artist            :text             not null
 #  chara1            :text             not null
+#  chara2            :text             not null
 #  debut             :text             not null
-#  deleted           :integer          default(0), not null
-#  easy_diff         :integer
-#  easy_hold_flag    :integer
-#  ex_diff           :integer
-#  ex_hold_flag      :integer
 #  folder            :text
 #  fw_artist         :text             not null
 #  fw_genre          :text             not null
@@ -18,10 +14,6 @@
 #  genre             :text             not null
 #  genre_romantrans  :text
 #  genre_sort_char   :text             not null
-#  hyper_diff        :integer
-#  hyper_hold_flag   :integer
-#  normal_diff       :integer
-#  normal_hold_flag  :integer
 #  remywiki_chara    :text
 #  remywiki_title    :text
 #  remywiki_url_path :text
@@ -52,7 +44,11 @@ class Song < ApplicationRecord
   end
 
   def character1
-    @character ||= Character.find_by(chara_id: chara1)
+    @character1 ||= Character.find_by(chara_id: chara1)
+  end
+
+  def character2
+    @character2 ||= Character.find_by(chara_id: chara2)
   end
 
   def labels
