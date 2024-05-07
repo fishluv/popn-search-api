@@ -1,7 +1,7 @@
 class SongBlueprint < Blueprinter::Base
   identifier :id
 
-  fields *%i[
+  fields(*%i[
     title
     title_sort_char
     remywiki_title
@@ -15,7 +15,7 @@ class SongBlueprint < Blueprinter::Base
     remywiki_url_path
     remywiki_chara
     labels
-  ]
+  ])
 
   field :easy_diff do |song|
     song.charts.find { _1.difficulty == "e" }&.level
