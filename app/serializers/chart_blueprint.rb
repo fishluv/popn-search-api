@@ -17,10 +17,6 @@ class ChartBlueprint < Blueprinter::Base
     SongBlueprint.render_as_hash(chart.song)
   end
 
-  field :has_holds do |chart|
-    chart.hold_notes > 0
-  end
-
   field :rating do |chart|
     chart.jkwiki_chart&.rating
   end
