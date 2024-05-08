@@ -5,7 +5,6 @@ class ChartBlueprint < Blueprinter::Base
     difficulty
     level
     bpm
-    bpm_steps
     duration
     notes
     hold_notes
@@ -15,6 +14,10 @@ class ChartBlueprint < Blueprinter::Base
 
   field :song do |chart|
     SongBlueprint.render_as_hash(chart.song)
+  end
+
+  field :bpm_steps do |chart|
+    chart.bpm_steps.split(",")
   end
 
   field :rating do |chart|
