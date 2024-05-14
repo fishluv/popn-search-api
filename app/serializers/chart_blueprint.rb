@@ -1,3 +1,5 @@
+require "json"
+
 class ChartBlueprint < Blueprinter::Base
   identifier :id
 
@@ -8,6 +10,7 @@ class ChartBlueprint < Blueprinter::Base
     duration
     notes
     hold_notes
+    timing
     jkwiki_page_path
     labels
   ])
@@ -18,6 +21,12 @@ class ChartBlueprint < Blueprinter::Base
 
   field :bpm_steps do |chart|
     chart.bpm_steps.split(",")
+  end
+
+  field :timing_steps do |chart|
+    JSON.parse(chart.timing_steps)
+  rescue
+    []
   end
 
   field :rating do |chart|

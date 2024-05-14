@@ -15,6 +15,8 @@
 #  jkwiki_page_path       :text
 #  level                  :integer          not null
 #  notes                  :integer
+#  timing                 :text
+#  timing_steps           :text
 #  song_id                :integer          not null
 #
 # Foreign Keys

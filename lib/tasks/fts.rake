@@ -52,6 +52,8 @@ namespace :fts do
 
   desc "Setup virtual tables"
   task setup: [:init] do
+    ActiveRecord::Base.logger = nil
+
     log "inserting song and chart data"
     # Song.first(5).each_with_index do |song, idx|
     Song.find_each.with_index do |song, idx|
