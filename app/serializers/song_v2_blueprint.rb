@@ -1,58 +1,41 @@
 class SongV2Blueprint < Blueprinter::Base
-  identifier :id
-
-  view :search do
-    field :folder
-    field :remywiki_title, name: :remywikiTitle
-    field :easy_diff, name: :easyLevel
-    field :normal_diff, name: :normalLevel
-    field :hyper_diff, name: :hyperLevel
-    field :ex_diff, name: :exLevel
+  def self.render_if_present(rec, blueprint_class)
+    rec.nil? ? nil : blueprint_class.render_as_hash(rec)
   end
 
-  view :fetch do
-    fields *%i[
-      title
-      genre
-      artist
-      folder
-      labels
-    ]
+  identifier :id
 
-    field :remywiki_title, name: :remywikiTitle
-    field :genre_romantrans, name: :romantransGenre
-    field :easy_diff, name: :easyLevel
-    field :normal_diff, name: :normalLevel
-    field :hyper_diff, name: :hyperLevel
-    field :ex_diff, name: :exLevel
-    field :remywiki_url_path, name: :remywikiPath
+  fields(*%i[
+    title
+    title_sort_char
+    remywiki_title
+    genre
+    genre_sort_char
+    genre_romantrans
+    artist
+    debut
+    folder
+    slug
+    remywiki_url_path
+    remywiki_chara
+    labels
+  ])
 
-    field :titleSortChar do |song|
-      song.fw_title[0]
-    end
+  field :character1 do |song|
+    render_if_present(song.character1, CharacterBlueprint)
+  end
 
-    field :genreSortChar do |song|
-      song.fw_genre[0]
-    end
+  field :character2 do |song|
+    render_if_present(song.character2, CharacterBlueprint)
+  end
 
-    field :character do |song|
-      CharacterBlueprint.render_as_hash(song.character1)
-    end
-
-    field :easyChartId do |song|
-      "#{song.id}e" if song.easy_diff
-    end
-
-    field :normalChartId do |song|
-      "#{song.id}n" if song.normal_diff
-    end
-
-    field :hyperChartId do |song|
-      "#{song.id}h" if song.hyper_diff
-    end
-
-    field :exChartId do |song|
-      "#{song.id}ex" if song.ex_diff
-    end
+  field :charts do |song|
+    charts = song.charts
+    {
+      "e" => render_if_present(charts.find { _1.difficulty == "e" }, ChartV2Blueprint),
+      "n" => render_if_present(charts.find { _1.difficulty == "n" }, ChartV2Blueprint),
+      "h" => render_if_present(charts.find { _1.difficulty == "h" }, ChartV2Blueprint),
+      "ex" => render_if_present(charts.find { _1.difficulty == "ex" }, ChartV2Blueprint),
+    }
   end
 end

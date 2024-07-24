@@ -13,7 +13,7 @@ class SearchController < ApplicationController
     results = Chart.search(token_string).limit(limit)
 
     if params[:version] == "v2"
-      render json: ChartV2Blueprint.render(results, view: :search)
+      render json: ChartV2Blueprint.render(results, view: :with_barebones_song)
     else
       render json: ChartBlueprint.render(results)
     end
@@ -33,7 +33,7 @@ class SearchController < ApplicationController
     results = Song.search(token_string).limit(limit)
 
     if params[:version] == "v2"
-      render json: SongV2Blueprint.render(results, view: :search)
+      render json: SongV2Blueprint.render(results)
     else
       render json: SongBlueprint.render(results)
     end
