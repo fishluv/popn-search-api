@@ -7,10 +7,8 @@ class SongV2Blueprint < Blueprinter::Base
 
   fields(*%i[
     title
-    title_sort_char
     remywiki_title
     genre
-    genre_sort_char
     genre_romantrans
     artist
     debut
@@ -20,6 +18,9 @@ class SongV2Blueprint < Blueprinter::Base
     remywiki_chara
     labels
   ])
+
+  field :fw_title, name: :sort_title
+  field :fw_genre, name: :sort_genre
 
   field :character1 do |song|
     render_if_present(song.character1, CharacterBlueprint)
