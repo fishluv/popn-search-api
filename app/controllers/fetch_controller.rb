@@ -12,8 +12,4 @@ class FetchController < ApplicationController
 
     render json: ChartBlueprint.render(chart)
   end
-
-  def songs
-    render json: SongV2Blueprint.render(Song.find(params[:id]), view: :fetch)
-  end
 end
