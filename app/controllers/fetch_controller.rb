@@ -12,4 +12,12 @@ class FetchController < ApplicationController
 
     render json: ChartBlueprint.render(chart)
   end
+
+  def charts_v2
+    song = Song.find_by!(slug: params[:slug])
+    chart = song&.charts&.find { _1.difficulty == params[:diff] }
+    raise ActiveRecord::RecordNotFound unless chart
+
+    render json: ChartV2Blueprint.render(chart, view: :with_song)
+  end
 end
