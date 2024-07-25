@@ -31,10 +31,9 @@ class ChartV2Blueprint < Blueprinter::Base
     chart.jkwiki_chart&.sran_level
   end
 
-  # Barebones subset used for showing song banner.
-  view :with_barebones_song do
+  view :with_song do
     field :song do |chart|
-      chart.song.attributes.slice("id", "remywiki_title", "folder")
+      SongV2Blueprint.render_as_hash(chart.song)
     end
   end
 end

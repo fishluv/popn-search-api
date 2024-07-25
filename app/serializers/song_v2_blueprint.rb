@@ -30,13 +30,15 @@ class SongV2Blueprint < Blueprinter::Base
     render_if_present(song.character2, CharacterBlueprint)
   end
 
-  field :charts do |song|
-    charts = song.charts
-    {
-      "e" => render_if_present(charts.find { _1.difficulty == "e" }, ChartV2Blueprint),
-      "n" => render_if_present(charts.find { _1.difficulty == "n" }, ChartV2Blueprint),
-      "h" => render_if_present(charts.find { _1.difficulty == "h" }, ChartV2Blueprint),
-      "ex" => render_if_present(charts.find { _1.difficulty == "ex" }, ChartV2Blueprint),
-    }
+  view :with_charts do
+    field :charts do |song|
+      charts = song.charts
+      {
+        "e" => render_if_present(charts.find { _1.difficulty == "e" }, ChartV2Blueprint),
+        "n" => render_if_present(charts.find { _1.difficulty == "n" }, ChartV2Blueprint),
+        "h" => render_if_present(charts.find { _1.difficulty == "h" }, ChartV2Blueprint),
+        "ex" => render_if_present(charts.find { _1.difficulty == "ex" }, ChartV2Blueprint),
+      }
+    end
   end
 end
