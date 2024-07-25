@@ -7,14 +7,9 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    # Local frontends
-    origins "localhost:3001"
-    resource "*", headers: :any, methods: [:get, :post, :put, :patch, :delete], credentials: true
-  end
-
-  allow do
-    # Production frontends
-    origins "popn.tools"
-    resource "*", headers: :any, methods: [:get, :post, :put, :patch, :delete], credentials: true
+    origins "localhost:3001", # Local
+            "dev.popn.tools", # Test
+            "popn.tools"      # Prod
+    resource "*", headers: :any, methods: :get, credentials: true
   end
 end
