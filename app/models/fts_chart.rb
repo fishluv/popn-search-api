@@ -5,6 +5,7 @@
 #  id                :
 #  artist            :
 #  chara1_disp_name  :
+#  chara2_disp_name  :
 #  charas_romantrans :
 #  difficulty        :
 #  extra             :

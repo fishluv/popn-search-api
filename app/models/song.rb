@@ -13,13 +13,11 @@
 #  fw_title          :text             not null
 #  genre             :text             not null
 #  genre_romantrans  :text
-#  genre_sort_char   :text             not null
 #  remywiki_chara    :text
 #  remywiki_title    :text
 #  remywiki_url_path :text
 #  slug              :text
 #  title             :text             not null
-#  title_sort_char   :text             not null
 #
 class Song < ApplicationRecord
   has_many :charts

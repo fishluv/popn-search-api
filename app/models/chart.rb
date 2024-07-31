@@ -10,7 +10,6 @@
 #  filename               :text
 #  folder                 :text
 #  force_new_chart_format :integer
-#  has_holds              :integer          not null
 #  hold_notes             :integer
 #  jkwiki_page_path       :text
 #  level                  :integer          not null
