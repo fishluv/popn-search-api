@@ -43,7 +43,7 @@ class Chart < ApplicationRecord
     ]
     self
       .joins("join fts_charts on charts.id = fts_charts.id")
-      .where("fts_charts match #{Fts.match_string(query)}")
+      .where("fts_charts match #{Fts.match_string(query, "level")}")
       .order(Arel.sql("bm25(fts_charts, #{weights.join(",")})"))
   end
 

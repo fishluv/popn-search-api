@@ -2,7 +2,7 @@ require_relative "../../app/lib/Fts"
 
 RSpec.describe Fts do
   describe ".match_string" do
-    subject { described_class.match_string(query) }
+    subject { described_class.match_string(query, "level_col") }
 
     context "when in general" do
       let(:query) { "a b c" }
@@ -17,6 +17,14 @@ RSpec.describe Fts do
 
       it "doubles the single quotes" do
         is_expected.to eq("'\"I''m\" AND \"on\" AND \"fire\"'")
+      end
+    end
+
+    context "when level range" do
+      let(:query) { "a 48-50 c" }
+
+      it "expands level range and doesn't double quote it" do
+        is_expected.to eq("'\"a\" AND level_col:(48 OR 49 OR 50) AND \"c\"'")
       end
     end
   end

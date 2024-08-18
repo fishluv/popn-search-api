@@ -37,7 +37,7 @@ class Song < ApplicationRecord
     ]
     self
       .joins("join fts_songs on songs.id = fts_songs.id")
-      .where("fts_songs match #{Fts.match_string(query)}")
+      .where("fts_songs match #{Fts.match_string(query, "diffs_levels")}")
       .order(Arel.sql("bm25(fts_songs, #{weights.join(",")})"))
   end
 
