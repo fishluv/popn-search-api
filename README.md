@@ -12,3 +12,9 @@ bin/rails s
 curl http://localhost:3000/charts?q=cuddle%20core
 curl http://localhost:3000/songs?q=cuddle%20core
 ```
+
+## Tests
+
+```sh
+bundle exec rspec
+```
