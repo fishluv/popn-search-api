@@ -7,8 +7,8 @@ RSpec.describe Fts do
     context "when in general" do
       let(:query) { "a b c" }
 
-      it "double quotes each term and puts whole thing in single quotes" do
-        is_expected.to eq("'\"a\" \"b\" \"c\"'")
+      it "double quotes each term, adds AND, and puts whole thing in single quotes" do
+        is_expected.to eq("'\"a\" AND \"b\" AND \"c\"'")
       end
     end
 
@@ -16,7 +16,7 @@ RSpec.describe Fts do
       let(:query) { "I'm on fire" }
 
       it "doubles the single quotes" do
-        is_expected.to eq("'\"I''m\" \"on\" \"fire\"'")
+        is_expected.to eq("'\"I''m\" AND \"on\" AND \"fire\"'")
       end
     end
   end
