@@ -12,7 +12,7 @@ class SearchController < ApplicationController
     token_string = @tokens.join(" ")
     results = Chart.search(token_string).limit(limit)
 
-    render json: ChartV2Blueprint.render(results, view: :with_song)
+    render json: ChartBlueprint.render(results, view: :with_song)
   end
 
   def songs
@@ -28,7 +28,7 @@ class SearchController < ApplicationController
     token_string = @tokens.join(" ")
     results = Song.search(token_string).limit(limit)
 
-    render json: SongV2Blueprint.render(results, view: :with_charts)
+    render json: SongBlueprint.render(results, view: :with_charts)
   end
 
   private

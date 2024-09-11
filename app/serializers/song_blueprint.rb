@@ -1,4 +1,4 @@
-class SongV2Blueprint < Blueprinter::Base
+class SongBlueprint < Blueprinter::Base
   def self.render_if_present(rec, blueprint_class)
     rec.nil? ? nil : blueprint_class.render_as_hash(rec)
   end
@@ -34,10 +34,10 @@ class SongV2Blueprint < Blueprinter::Base
     field :charts do |song|
       charts = song.charts
       {
-        "e" => render_if_present(charts.find { _1.difficulty == "e" }, ChartV2Blueprint),
-        "n" => render_if_present(charts.find { _1.difficulty == "n" }, ChartV2Blueprint),
-        "h" => render_if_present(charts.find { _1.difficulty == "h" }, ChartV2Blueprint),
-        "ex" => render_if_present(charts.find { _1.difficulty == "ex" }, ChartV2Blueprint),
+        "e" => render_if_present(charts.find { _1.difficulty == "e" }, ChartBlueprint),
+        "n" => render_if_present(charts.find { _1.difficulty == "n" }, ChartBlueprint),
+        "h" => render_if_present(charts.find { _1.difficulty == "h" }, ChartBlueprint),
+        "ex" => render_if_present(charts.find { _1.difficulty == "ex" }, ChartBlueprint),
       }
     end
   end

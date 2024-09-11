@@ -1,4 +1,4 @@
-class ChartV2Blueprint < Blueprinter::Base
+class ChartBlueprint < Blueprinter::Base
   identifier :id
 
   fields(*%i[
@@ -33,7 +33,7 @@ class ChartV2Blueprint < Blueprinter::Base
 
   view :with_song do
     field :song do |chart|
-      SongV2Blueprint.render_as_hash(chart.song)
+      SongBlueprint.render_as_hash(chart.song)
     end
   end
 end
