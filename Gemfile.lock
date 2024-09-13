@@ -95,6 +95,7 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
+    mini_portile2 (2.8.7)
     minitest (5.16.2)
     msgpack (1.5.4)
     net-imap (0.2.3)
@@ -112,9 +113,8 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.8-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.13.8-x86_64-linux)
+    nokogiri (1.13.8)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     puma (5.6.4)
       nio4r (~> 2.0)
@@ -204,7 +204,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 3.0.0p0
+   ruby 3.3.0p0
 
 BUNDLED WITH
-   2.2.3
+   2.5.18
