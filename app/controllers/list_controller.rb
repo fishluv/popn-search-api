@@ -44,12 +44,9 @@ class ListController < ApplicationController
     scope = scope.where(debut: @debut) if @debut
     scope = scope.where(folder: @folder) if @folder
 
-    if @level
-      scope = scope.joins(
-        "inner join fts_songs on songs.id = fts_songs.id " \
-        "and fts_songs.diffs_levels || ' ' like '% ? %'",
-        @level
-      )
+    if @level && (1..50).include?(@level.to_i)
+      scope = scope.joins("inner join fts_songs on songs.id = fts_songs.id")
+                   .where("fts_songs.diffs_levels || ' ' like '% #{@level} %'")
     end
 
     @order.each do |order|
