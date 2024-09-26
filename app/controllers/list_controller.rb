@@ -86,5 +86,6 @@ class ListController < ApplicationController
     @diff = params[:diff]
     @level = params[:level]
     @order = [params[:order]].flatten.compact
+    @order = ["title"] if @order.empty?
   end
 end
