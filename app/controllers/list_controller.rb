@@ -17,6 +17,12 @@ class ListController < ApplicationController
         scope = scope.order("songs.fw_genre #{"desc" if desc}")
       when "rtitle"
         scope = scope.order("songs.remywiki_title #{"desc" if desc}")
+      when "rgenre"
+        scope = scope.order("songs.genre_romantrans #{"desc" if desc}")
+      when "debut"
+        scope = scope.order("songs.debut #{"desc" if desc}")
+      when "folder"
+        scope = scope.order("songs.folder #{"desc" if desc}")
       when "id"
         scope = scope.order("songs.id #{"desc" if desc}")
       when "level"
@@ -48,6 +54,12 @@ class ListController < ApplicationController
         scope = scope.order("fw_genre #{"desc" if desc}")
       when "rtitle"
         scope = scope.order("remywiki_title #{"desc" if desc}")
+      when "rgenre"
+        scope = scope.order("genre_romantrans #{"desc" if desc}")
+      when "debut"
+        scope = scope.order("debut #{"desc" if desc}")
+      when "folder"
+        scope = scope.order("folder #{"desc" if desc}")
       when "id"
         scope = scope.order("id #{"desc" if desc}")
       end
