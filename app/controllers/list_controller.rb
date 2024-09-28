@@ -44,9 +44,25 @@ class ListController < ApplicationController
     scope = scope.where(debut: @debut) if @debut
     scope = scope.where(folder: @folder) if @folder
 
-    if @level && (1..50).include?(@level.to_i)
+    if @level_parts
+      levels = @level_parts.map do |num_or_range|
+        case num_or_range
+        when /^(\d{1,2})$/
+          (1..50).include?($1.to_i) ? $1.to_i : nil
+        when /^(\d{1,2})-$/
+          ($1.to_i..50).to_a
+        when /^-(\d{1,2})$/
+          (1..$1.to_i).to_a
+        when /^(\d{1,2})-(\d{1,2})$/
+          (1..50).include?($1.to_i) && (1..50).include?($2.to_i) ? ($1.to_i..$2.to_i).to_a : nil
+        else
+          nil
+        end
+      end.flatten.uniq.compact
+
+      where_clause = levels.map { "fts_songs.diffs_levels || ' ' like '% #{_1} %'" }.join(" or ")
       scope = scope.joins("inner join fts_songs on songs.id = fts_songs.id")
-                   .where("fts_songs.diffs_levels || ' ' like '% #{@level} %'")
+                   .where(where_clause)
     end
 
     @order.each do |order|
@@ -84,7 +100,7 @@ class ListController < ApplicationController
     @debut = params[:debut]
     @folder = params[:folder]
     @diff = params[:diff]
-    @level = params[:level]
+    @level_parts = params[:level]&.split(",")&.map(&:strip)
     @order = [params[:order]].flatten.compact
     @order = ["title"] if @order.empty?
   end
