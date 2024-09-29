@@ -10,6 +10,7 @@ class ListController < ApplicationController
     @sorts.each do |sort|
       desc = sort.start_with?("-")
       sort.delete_prefix!("-")
+      # Don't forget `collate nocase` (for columns that need it).
       case sort
       when "title"
         scope = scope.order("songs.fw_title #{"desc" if desc}")
@@ -18,7 +19,7 @@ class ListController < ApplicationController
       when "rtitle"
         scope = scope.order("songs.remywiki_title #{"desc" if desc}")
       when "rgenre"
-        scope = scope.order("songs.genre_romantrans #{"desc" if desc}")
+        scope = scope.order(Arel.sql("songs.genre_romantrans collate nocase #{"desc" if desc}"))
       when "debut"
         scope = scope.order("songs.debut #{"desc" if desc}")
       when "folder"
@@ -68,6 +69,7 @@ class ListController < ApplicationController
     @sorts.each do |sort|
       desc = sort.start_with?("-")
       sort.delete_prefix!("-")
+      # Don't forget `collate nocase` (for columns that need it).
       case sort
       when "title"
         scope = scope.order("fw_title #{"desc" if desc}")
@@ -76,7 +78,7 @@ class ListController < ApplicationController
       when "rtitle"
         scope = scope.order("remywiki_title #{"desc" if desc}")
       when "rgenre"
-        scope = scope.order("genre_romantrans #{"desc" if desc}")
+        scope = scope.order(Arel.sql("genre_romantrans collate nocase #{"desc" if desc}"))
       when "debut"
         scope = scope.order("debut #{"desc" if desc}")
       when "folder"
