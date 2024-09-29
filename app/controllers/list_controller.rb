@@ -7,10 +7,10 @@ class ListController < ApplicationController
     scope = scope.where(difficulty: @diff) if @diff.presence
     scope = scope.where(level: @level) if @level.presence
 
-    @order.each do |order|
-      desc = order.start_with?("-")
-      order.delete_prefix!("-")
-      case order
+    @sorts.each do |sort|
+      desc = sort.start_with?("-")
+      sort.delete_prefix!("-")
+      case sort
       when "title"
         scope = scope.order("songs.fw_title #{"desc" if desc}")
       when "genre"
@@ -65,10 +65,10 @@ class ListController < ApplicationController
                    .where(where_clause)
     end
 
-    @order.each do |order|
-      desc = order.start_with?("-")
-      order.delete_prefix!("-")
-      case order
+    @sorts.each do |sort|
+      desc = sort.start_with?("-")
+      sort.delete_prefix!("-")
+      case sort
       when "title"
         scope = scope.order("fw_title #{"desc" if desc}")
       when "genre"
@@ -101,7 +101,7 @@ class ListController < ApplicationController
     @folder = params[:folder]
     @diff = params[:diff]
     @level_parts = params[:level]&.split(",")&.map(&:strip)
-    @order = [params[:order]].flatten.compact
-    @order = ["title"] if @order.empty?
+    @sorts = [params[:sort]].flatten.compact
+    @sorts = ["title"] if @sorts.empty?
   end
 end
