@@ -31,6 +31,11 @@ class ListController < ApplicationController
       end
     end
 
+    if @q
+      token_string = Query.normalize(@q)
+      scope = scope.search(token_string)
+    end
+
     @pagy, @records = pagy(scope)
 
     render json: {
@@ -88,6 +93,11 @@ class ListController < ApplicationController
       end
     end
 
+    if @q
+      token_string = Query.normalize(@q)
+      scope = scope.search(token_string)
+    end
+
     @pagy, @records = pagy(scope)
 
     render json: {
@@ -105,5 +115,6 @@ class ListController < ApplicationController
     @level_parts = params[:level]&.split(",")&.map(&:strip)
     @sorts = [params[:sort]].flatten.compact
     @sorts = ["title"] if @sorts.empty?
+    @q = params[:q].presence
   end
 end
