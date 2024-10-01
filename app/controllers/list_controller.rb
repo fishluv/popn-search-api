@@ -50,23 +50,8 @@ class ListController < ApplicationController
     scope = scope.where(debut: @debut) if @debut
     scope = scope.where(folder: @folder) if @folder
 
-    if @level_parts
-      levels = @level_parts.map do |num_or_range|
-        case num_or_range
-        when /^(\d{1,2})$/
-          (1..50).include?($1.to_i) ? $1.to_i : nil
-        when /^(\d{1,2})-$/
-          ($1.to_i..50).to_a
-        when /^-(\d{1,2})$/
-          (1..$1.to_i).to_a
-        when /^(\d{1,2})-(\d{1,2})$/
-          (1..50).include?($1.to_i) && (1..50).include?($2.to_i) ? ($1.to_i..$2.to_i).to_a : nil
-        else
-          nil
-        end
-      end.flatten.uniq.compact
-
-      where_clause = levels.map { "fts_songs.diffs_levels || ' ' like '% #{_1} %'" }.join(" or ")
+    if @level
+      where_clause = Level.to_where_clause(@level)
       scope = scope.joins("inner join fts_songs on songs.id = fts_songs.id")
                    .where(where_clause)
     end
@@ -112,7 +97,7 @@ class ListController < ApplicationController
     @debut = params[:debut]
     @folder = params[:folder]
     @diff = params[:diff]
-    @level_parts = params[:level]&.split(",")&.map(&:strip)
+    @level = params[:level]
     @sorts = [params[:sort]].flatten.compact
     @sorts = ["title"] if @sorts.empty?
     @q = params[:q].presence
