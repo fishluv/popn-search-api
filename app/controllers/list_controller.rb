@@ -52,8 +52,10 @@ class ListController < ApplicationController
 
     if @level
       where_clause = Level.to_where_clause(@level)
-      scope = scope.joins("inner join fts_songs on songs.id = fts_songs.id")
-                   .where(where_clause)
+      if where_clause.present?
+        scope = scope.joins("inner join fts_songs on songs.id = fts_songs.id")
+                    .where(where_clause)
+      end
     end
 
     @sorts.each do |sort|
