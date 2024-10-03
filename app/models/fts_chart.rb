@@ -11,7 +11,7 @@
 #  extra             :
 #  level             :
 #  song_debut        :
-#  song_folder       :
+#  song_folders      :
 #  title_genre       :
 #  song_id           :
 #
