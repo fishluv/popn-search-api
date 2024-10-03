@@ -4,10 +4,12 @@
 #
 #  id                :integer          primary key
 #  artist            :text             not null
+#  categories        :integer          not null
 #  chara1            :text             not null
 #  chara2            :text             not null
+#  cs_version        :integer          not null
 #  debut             :text             not null
-#  folder            :text
+#  folder            :integer          not null
 #  fw_artist         :text             not null
 #  fw_genre          :text             not null
 #  fw_title          :text             not null
@@ -18,16 +20,34 @@
 #  remywiki_url_path :text
 #  slug              :text
 #  title             :text             not null
+#  version_folder    :text
 #
 class Song < ApplicationRecord
   has_many :charts
+
+  CATEGORIES_BIT_VALUES = {
+    # In-game order
+    # https://github.com/CrazyRedMachine/popnhax_tools/blob/8c424ae3a97ed907ec0bee63b1d12a077e023f63/omnimix/omnimix_db.md#music-database-format
+    "iidx" =>       0x0002,
+    "ddr" =>        0x0004,
+    "gitadora" =>   0x0008,
+    "jubeat" =>     0x0800,
+    "reflec" =>     0x1000,
+    "sdvx" =>       0x2000,
+    "beatstream" => 0x4000,
+    "museca" =>     0x8000,
+    "nostalgia" => 0x10000,
+    "bemani" =>     0x07f1,
+  }.freeze
+
+  scope :in_folder, ->(folder) { where("categories & ? != 0", CATEGORIES_BIT_VALUES[folder]) }
 
   scope :search, ->(query) do
     weights = [
       0, # id
       0.5, # id_pad
       1, # debut
-      1, # folder
+      1, # version_folder
       1, # title_genre
       0.75, # artist
       1, # extra
@@ -47,6 +67,10 @@ class Song < ApplicationRecord
 
   def character2
     @character2 ||= Character.find_by(chara_id: chara2)
+  end
+
+  def bemani_folders
+    CATEGORIES_BIT_VALUES.keys.select { categories & CATEGORIES_BIT_VALUES[_1] != 0 }
   end
 
   def labels
