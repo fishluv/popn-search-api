@@ -73,6 +73,10 @@ class Song < ApplicationRecord
     CATEGORIES_BIT_VALUES.keys.select { categories & CATEGORIES_BIT_VALUES[_1] != 0 }
   end
 
+  def folders
+    [version_folder, *bemani_folders].compact
+  end
+
   def labels
     @labels ||= Label.where(record_type: "song", record_id: id).pluck(:value)
   end

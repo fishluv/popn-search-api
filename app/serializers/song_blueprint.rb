@@ -12,7 +12,7 @@ class SongBlueprint < Blueprinter::Base
     genre_romantrans
     artist
     debut
-    folder
+    folders
     slug
     remywiki_url_path
     remywiki_chara

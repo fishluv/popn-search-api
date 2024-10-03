@@ -63,7 +63,7 @@ namespace :fts do
         song.id, # Don't pad this. For joining, not searching.
         pad(song.id),
         pad(norm_debut(song.debut)),
-        pad(get_folders_string(song)),
+        get_folders_string(song),
         pad(norm_title_genre(song)),
         pad(norm_artist(song.artist)),
         song.labels.join(" "),
@@ -97,7 +97,7 @@ namespace :fts do
           chart.id, # Don't pad this. For joining, not searching.
           pad(song.id),
           pad(norm_debut(song.debut)),
-          pad(get_folders_string(song)),
+          get_folders_string(song),
           pad(norm_title_genre(song)),
           pad(norm_artist(song.artist)),
           (song.labels + chart.labels).join(" "),
@@ -164,8 +164,7 @@ def norm_debut(debut)
 end
 
 def get_folders_string(song)
-  version_folder = song.version_folder ? pad(norm_version_folder(song.version_folder)) : nil
-  [version_folder, *song.bemani_folders].compact.join(" ")
+  song.folders.map { pad(norm_version_folder(_1)) }.join(" ")
 end
 
 def norm_version_folder(version_folder)
