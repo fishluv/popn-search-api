@@ -1,4 +1,24 @@
 class ListController < ApplicationController
+  DEBUT_ORDER_BY = %(
+    case cast(songs.debut as integer)
+    when 0 then -- non-ac version --
+      case cast(replace(songs.debut, 'cs', '') as integer)
+      when 0 -- non-numbered cs version (and eemall) --
+        then
+          case songs.debut
+          when 'csbest' then '007b'
+          when 'cspmp' then '016'
+          when 'csutacchi' then '017'
+          when 'cspmp2' then '018'
+          when 'cslively' then '019'
+          when 'eemall' then '109e'
+          end
+      else '0' || substr('0' || replace(songs.debut, 'cs', ''), -2, 2) -- sort cs before ac --
+      end
+    else '1' || substr('0' || songs.debut, -2, 2)
+    end
+  )
+
   def charts
     parse_params
     scope = Chart.joins(:song)
@@ -87,7 +107,7 @@ class ListController < ApplicationController
       when "rgenre"
         scope = scope.order(Arel.sql("genre_romantrans collate nocase #{"desc" if desc}"))
       when "debut"
-        scope = scope.order("debut #{"desc" if desc}")
+        scope = scope.order(Arel.sql("#{DEBUT_ORDER_BY} #{"desc" if desc}"))
       when "folder"
         scope = scope.order("folder #{"desc" if desc}")
       when "id"
