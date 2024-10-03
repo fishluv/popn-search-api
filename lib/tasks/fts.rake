@@ -144,22 +144,17 @@ end
 
 def norm_debut(debut)
   case debut
-  when "_cs07b"
-    "best hits"
-  when "_cs16"
-    "portable 1"
-  when "_cs17"
-    "utacchi"
-  when "_cs18"
-    "portable 2"
-  when "_cs19"
-    "lively"
-  when "ac09e"
-    "eemall"
+  when "csbest"
+    "cs best hits"
+  when "cspmp"
+    "cs portable 1"
+  when "cspmp2"
+    "cs portable 2"
+  when "cslively"
+    "cs lively"
   else
-    version = debut.match(/(\d{2})/)[1].to_i
-    is_cs = debut.match?(/_cs/)
-    "#{pad(norm_version_folder(version.to_s))}#{is_cs ? " cs#{version}" : ""}"
+    version = debut.delete_prefix("cs")
+    "#{pad(norm_version_folder(version))}#{debut.start_with?("cs") ? " cs" : ""}"
   end
 end
 
