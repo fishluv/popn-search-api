@@ -2,10 +2,18 @@ class ListController < ApplicationController
   def charts
     parse_params
     scope = Chart.joins(:song)
-    scope = scope.where("songs.debut = ?", @debut) if @debut.presence
-    scope = scope.where("songs.folder = ?", @folder) if @folder.presence
-    scope = scope.where(difficulty: @diff) if @diff.presence
-    scope = scope.where(level: @level) if @level.presence
+    scope = scope.where("songs.debut = ?", @debut) if @debut
+
+    if @folder
+      if @folder == "cs" || @folder.to_i.positive?
+        scope = scope.where("songs.version_folder = ?", @folder)
+      elsif Song::CATEGORIES_BIT_VALUES.include?(@folder)
+        scope = scope.where("songs.categories & ? != 0", Song::CATEGORIES_BIT_VALUES[@folder])
+      end
+    end
+
+    scope = scope.where(difficulty: @diff) if @diff
+    scope = scope.where(level: @level) if @level
 
     @sorts.each do |sort|
       desc = sort.start_with?("-")
@@ -48,7 +56,14 @@ class ListController < ApplicationController
     parse_params
     scope = Song
     scope = scope.where(debut: @debut) if @debut
-    scope = scope.where(folder: @folder) if @folder
+
+    if @folder
+      if @folder == "cs" || @folder.to_i.positive?
+        scope = scope.where(version_folder: @folder)
+      elsif Song::CATEGORIES_BIT_VALUES.include?(@folder)
+        scope = scope.where("categories & ? != 0", Song::CATEGORIES_BIT_VALUES[@folder])
+      end
+    end
 
     if @level
       where_clause = Level.to_where_clause(@level)
@@ -96,10 +111,10 @@ class ListController < ApplicationController
   private
 
   def parse_params
-    @debut = params[:debut]
-    @folder = params[:folder]
-    @diff = params[:diff]
-    @level = params[:level]
+    @debut = params[:debut].presence
+    @folder = params[:folder].presence
+    @diff = params[:diff].presence
+    @level = params[:level].presence
     @sorts = [params[:sort]].flatten.compact
     @sorts = ["title"] if @sorts.empty?
     @q = params[:q].presence
