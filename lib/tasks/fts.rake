@@ -144,7 +144,7 @@ end
 
 def norm_debut(debut)
   case debut
-  when "_cs15"
+  when "_cs07b"
     "best hits"
   when "_cs16"
     "portable 1"
