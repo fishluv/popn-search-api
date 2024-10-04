@@ -1,7 +1,11 @@
 class Fts
   class << self
+    # These chars don't play nice with sqlite fts.
+    DISALLOWED_CHARS = %w[&].freeze
+
     def match_string(query, level_col)
       query.gsub!("'", "''") # Need to double single quotes.
+      DISALLOWED_CHARS.each { query.gsub!(_1, "") }
 
       tokens = query.split
 

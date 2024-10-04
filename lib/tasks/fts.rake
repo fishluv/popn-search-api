@@ -164,6 +164,8 @@ end
 
 def norm_version_folder(version_folder)
   case version_folder
+  when "28"
+    "jam&fizz"
   when "27"
     "unilab"
   when "26"
