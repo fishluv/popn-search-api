@@ -169,7 +169,7 @@ def norm_version_folder(version_folder)
   when "27"
     "unilab"
   when "26"
-    "kaimei"
+    "kaimei riddles"
   when "25"
     "peace"
   when "24"
