@@ -42,7 +42,7 @@ class Song < ApplicationRecord
 
   scope :in_folder, ->(folder) { where("categories & ? != 0", CATEGORIES_BIT_VALUES[folder]) }
 
-  scope :search, ->(query) do
+  scope :search, ->(query, join: true) do
     weights = [
       0, # id
       0.5, # id_pad
@@ -55,8 +55,10 @@ class Song < ApplicationRecord
       1, # chara1_disp_name
       0.75, # charas_romantrans
     ]
-    self
-      .joins("join fts_songs on songs.id = fts_songs.id")
+
+    scope = self
+    scope = scope.joins("inner join fts_songs on songs.id = fts_songs.id") if join
+    scope
       .where("fts_songs match #{Fts.match_string(query, "diffs_levels")}")
       .order(Arel.sql("bm25(fts_songs, #{weights.join(",")})"))
   end

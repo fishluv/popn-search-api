@@ -117,7 +117,8 @@ class ListController < ApplicationController
 
     if @q
       token_string = Query.normalize(@q)
-      scope = scope.search(token_string)
+      # This does a join. Don't join if we already joined for level above.
+      scope = scope.search(token_string, join: @level.blank?)
     end
 
     @pagy, @records = pagy(scope)
