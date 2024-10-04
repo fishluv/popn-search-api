@@ -10,7 +10,7 @@
 #  debut             :
 #  diffs_levels      :
 #  extra             :
-#  folder            :
+#  folders           :
 #  id_pad            :
 #  title_genre       :
 #

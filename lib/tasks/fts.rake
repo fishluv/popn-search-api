@@ -17,7 +17,7 @@ namespace :fts do
           id,
           id_pad,
           debut,
-          folder,
+          folders,
           title_genre,
           artist,
           extra,
@@ -35,7 +35,7 @@ namespace :fts do
           id,
           song_id,
           song_debut,
-          song_folder,
+          song_folders,
           title_genre,
           artist,
           extra,
@@ -63,7 +63,7 @@ namespace :fts do
         song.id, # Don't pad this. For joining, not searching.
         pad(song.id),
         pad(norm_debut(song.debut)),
-        pad(norm_folder(song.folder)),
+        get_folders_string(song),
         pad(norm_title_genre(song)),
         pad(norm_artist(song.artist)),
         song.labels.join(" "),
@@ -78,7 +78,7 @@ namespace :fts do
             id,
             id_pad,
             debut,
-            folder,
+            folders,
             title_genre,
             artist,
             extra,
@@ -97,7 +97,7 @@ namespace :fts do
           chart.id, # Don't pad this. For joining, not searching.
           pad(song.id),
           pad(norm_debut(song.debut)),
-          pad(norm_folder(song.folder)),
+          get_folders_string(song),
           pad(norm_title_genre(song)),
           pad(norm_artist(song.artist)),
           (song.labels + chart.labels).join(" "),
@@ -117,7 +117,7 @@ namespace :fts do
             id,
             song_id,
             song_debut,
-            song_folder,
+            song_folders,
             title_genre,
             artist,
             extra,
@@ -145,18 +145,25 @@ end
 def norm_debut(debut)
   case debut
   when "csbest"
-    "best hits"
+    "cs best hits"
   when "cspmp"
-    "portable 1"
+    "cs portable 1"
   when "cspmp2"
-    "portable 2"
+    "cs portable 2"
+  when "cslively"
+    "cs lively"
   else
-    debut.delete_prefix("cs")
+    version = debut.delete_prefix("cs")
+    "#{pad(norm_version_folder(version))}#{debut.start_with?("cs") ? " cs" : ""}"
   end
 end
 
-def norm_folder(folder)
-  case folder
+def get_folders_string(song)
+  song.folders.map { pad(norm_version_folder(_1)) }.join(" ")
+end
+
+def norm_version_folder(version_folder)
+  case version_folder
   when "27"
     "unilab"
   when "26"
@@ -190,7 +197,7 @@ def norm_folder(folder)
   when "12"
     "iroha"
   else
-    folder
+    version_folder
   end
 end
 

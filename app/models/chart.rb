@@ -4,6 +4,8 @@
 #
 #  id                     :text             primary key
 #  bpm                    :text
+#  bpm_primary            :integer
+#  bpm_primary_type       :text
 #  bpm_steps              :text
 #  difficulty             :text             not null
 #  duration               :integer
@@ -32,7 +34,7 @@ class Chart < ApplicationRecord
       0, # id
       0.5, # song_id
       1, # song_debut
-      1, # song_folder
+      1, # song_folders
       1, # title_genre
       0.5, # artist
       1, # extra

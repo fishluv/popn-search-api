@@ -5,6 +5,8 @@ class ChartBlueprint < Blueprinter::Base
     difficulty
     level
     bpm
+    bpm_primary
+    bpm_primary_type
     duration
     notes
     hold_notes
