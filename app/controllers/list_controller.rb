@@ -137,7 +137,7 @@ class ListController < ApplicationController
   def parse_params
     @debut = params[:debut].presence
     @folder = params[:folder].presence
-    @diff = params[:diff].presence
+    @diff = params[:diff].presence || params[:difficulty].presence
     @level = params[:level].presence
     @sorts = [params[:sort]].flatten.compact
     @sorts = ["title"] if @sorts.empty?
