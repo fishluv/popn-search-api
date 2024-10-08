@@ -22,9 +22,7 @@ class ListController < ApplicationController
   def charts
     parse_params
     scope = Chart.joins(:song)
-    if params[:sort].include?("jrating") || params[:sort].include?("srlevel")
-      scope = scope.joins(:jkwiki_chart)
-    end
+    scope = scope.joins(:jkwiki_chart) if (@sorts & ["jrating", "-jrating", "srlevel", "-srlevel"]).any?
 
     scope = scope.where("songs.debut = ?", @debut) if @debut
 
@@ -37,14 +35,13 @@ class ListController < ApplicationController
     end
 
     scope = scope.where(difficulty: @diff) if @diff
-
-    parsed_levels = Numbers.parse_nums_and_ranges(@level, min: 1, max: 50)
-    scope = scope.where(level: parsed_levels) if @level.present?
-
-    parsed_bpm = Numbers.parse_nums_and_ranges(@bpm, min: 1, max: 999)
-    Rails.logger.error "#{@bpm}, #{parsed_bpm}"
-
-    scope = scope.where(bpm_primary: parsed_bpm) if @bpm.present?
+    scope = scope.where(level: Numbers.parse_nums_and_ranges(@level, min: 1, max: 50)) if @level.present?
+    scope = scope.where(bpm_primary: Numbers.parse_nums_and_ranges(@bpm, min: 1, max: 1000)) if @bpm.present?
+    scope = scope.where(bpm_primary_type: @bpmtype) if @bpmtype.present?
+    scope = scope.where(notes: Numbers.parse_nums_and_ranges(@notes, min: 1, max: 4000)) if @notes.present?
+    # TODO jrating
+    # TODO srlevel
+    scope = scope.where(timing: @timing) if @timing.present?
 
     @sorts.each do |sort|
       desc = sort.start_with?("-")
@@ -161,5 +158,10 @@ class ListController < ApplicationController
 
     # Charts-specific
     @bpm = params[:bpm].presence
+    @bpmtype = params[:bpmtype].presence
+    @notes = params[:notes].presence
+    @jrating = params[:jrating].presence
+    @srlevel = params[:srlevel].presence
+    @timing = params[:timing].presence
   end
 end
