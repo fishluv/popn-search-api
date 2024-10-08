@@ -150,19 +150,19 @@ class ListController < ApplicationController
   private
 
   def parse_params
+    # Charts and songs
     @debut = params[:debut].presence
     @folder = params[:folder].presence
-    @diff = params[:diff].presence || params[:difficulty].presence
     @level = params[:level].presence
     @sorts = [params[:sort]].flatten.compact
     @sorts = ["title"] if @sorts.empty?
     @q = params[:q].presence
 
     # Charts-specific
+    @diff = params[:diff].presence || params[:difficulty].presence
     @bpm = params[:bpm].presence
     @bpmtype = params[:bpmtype].presence
     @notes = params[:notes].presence
-    @jrating = params[:jrating].presence
     @srlevel = params[:srlevel].presence
     @timing = params[:timing].presence
   end
