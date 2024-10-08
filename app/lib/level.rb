@@ -1,7 +1,7 @@
 class Level
   class << self
-    def to_where_clause(level_string)
-      to_or_together = parse(level_string)
+    def to_songs_where_clause(level_string)
+      to_or_together = parse_levels(level_string)
       to_or_together.map do |to_and_together|
         to_and_together.map do |levels|
           levels_ored_together = levels.map do |level|
@@ -27,7 +27,7 @@ class Level
     #       [30],
     #     ],
     #   ]
-    def parse(level_string)
+    def parse_levels(level_string)
       return [] if level_string.blank?
 
       ors_and_ands = level_string.split(",").map do |or_operand|

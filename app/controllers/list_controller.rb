@@ -33,7 +33,9 @@ class ListController < ApplicationController
     end
 
     scope = scope.where(difficulty: @diff) if @diff
-    scope = scope.where(level: @level) if @level
+
+    parsed_levels = Level.parse_levels(@level).flatten
+    scope = scope.where(level: parsed_levels) if parsed_levels
 
     @sorts.each do |sort|
       desc = sort.start_with?("-")
@@ -49,9 +51,7 @@ class ListController < ApplicationController
       when "rgenre"
         scope = scope.order(Arel.sql("songs.genre_romantrans collate nocase #{"desc" if desc}"))
       when "debut"
-        scope = scope.order("songs.debut #{"desc" if desc}")
-      when "folder"
-        scope = scope.order("songs.folder #{"desc" if desc}")
+        scope = scope.order(Arel.sql("#{DEBUT_ORDER_BY} #{"desc" if desc}"))
       when "id"
         scope = scope.order("songs.id #{"desc" if desc}")
       when "level"
@@ -86,7 +86,7 @@ class ListController < ApplicationController
     end
 
     if @level
-      where_clause = Level.to_where_clause(@level)
+      where_clause = Level.to_songs_where_clause(@level)
       if where_clause.present?
         scope = scope.joins("inner join fts_songs on songs.id = fts_songs.id")
                     .where(where_clause)
@@ -108,8 +108,6 @@ class ListController < ApplicationController
         scope = scope.order(Arel.sql("genre_romantrans collate nocase #{"desc" if desc}"))
       when "debut"
         scope = scope.order(Arel.sql("#{DEBUT_ORDER_BY} #{"desc" if desc}"))
-      when "folder"
-        scope = scope.order("folder #{"desc" if desc}")
       when "id"
         scope = scope.order("id #{"desc" if desc}")
       end
@@ -117,7 +115,7 @@ class ListController < ApplicationController
 
     if @q
       token_string = Query.normalize(@q)
-      # This does a join. Don't join if we already joined for level above.
+      # This joins fts_songs. Don't join if we already joined for level above.
       scope = scope.search(token_string, join: @level.blank?)
     end
 
