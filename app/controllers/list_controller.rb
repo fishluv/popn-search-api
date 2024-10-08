@@ -34,8 +34,13 @@ class ListController < ApplicationController
 
     scope = scope.where(difficulty: @diff) if @diff
 
-    parsed_levels = Level.parse_levels(@level).flatten
-    scope = scope.where(level: parsed_levels) if parsed_levels
+    parsed_levels = Numbers.parse_nums_and_ranges(@level, min: 1, max: 50)
+    scope = scope.where(level: parsed_levels) if @level.present?
+
+    parsed_bpm = Numbers.parse_nums_and_ranges(@bpm, min: 1, max: 999)
+    Rails.logger.error "#{@bpm}, #{parsed_bpm}"
+
+    scope = scope.where(bpm_primary: parsed_bpm) if @bpm.present?
 
     @sorts.each do |sort|
       desc = sort.start_with?("-")
@@ -137,5 +142,8 @@ class ListController < ApplicationController
     @sorts = [params[:sort]].flatten.compact
     @sorts = ["title"] if @sorts.empty?
     @q = params[:q].presence
+
+    # Charts-specific
+    @bpm = params[:bpm].presence
   end
 end
