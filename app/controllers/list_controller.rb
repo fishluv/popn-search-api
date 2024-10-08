@@ -22,6 +22,10 @@ class ListController < ApplicationController
   def charts
     parse_params
     scope = Chart.joins(:song)
+    if params[:sort].include?("jrating") || params[:sort].include?("srlevel")
+      scope = scope.joins(:jkwiki_chart)
+    end
+
     scope = scope.where("songs.debut = ?", @debut) if @debut
 
     if @folder
@@ -61,6 +65,18 @@ class ListController < ApplicationController
         scope = scope.order("songs.id #{"desc" if desc}")
       when "level"
         scope = scope.order("level #{"desc" if desc}")
+      when "bpm"
+        scope = scope.order("bpm_primary #{"desc" if desc}")
+      when "duration"
+        scope = scope.order("duration #{"desc" if desc}")
+      when "hnotes"
+        scope = scope.order("hold_notes #{"desc" if desc}")
+      when "notes"
+        scope = scope.order("notes #{"desc" if desc}")
+      when "jrating"
+        scope = scope.order("jkwiki_charts.rating_num #{"desc" if desc}")
+      when "srlevel"
+        scope = scope.order("jkwiki_charts.sran_level #{"desc" if desc}")
       end
     end
 
