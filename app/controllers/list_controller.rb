@@ -22,7 +22,9 @@ class ListController < ApplicationController
   def charts
     parse_params
     scope = Chart.joins(:song)
-    scope = scope.joins(:jkwiki_chart) if (@sorts & ["jrating", "-jrating", "srlevel", "-srlevel"]).any?
+    if (@sorts & ["jrating", "-jrating", "srlevel", "-srlevel"]).any? || @srlevel.present?
+      scope = scope.joins(:jkwiki_chart)
+    end
 
     scope = scope.where("songs.debut = ?", @debut) if @debut
 
@@ -39,8 +41,8 @@ class ListController < ApplicationController
     scope = scope.where(bpm_primary: Numbers.parse_nums_and_ranges(@bpm, min: 1, max: 1000)) if @bpm.present?
     scope = scope.where(bpm_primary_type: @bpmtype) if @bpmtype.present?
     scope = scope.where(notes: Numbers.parse_nums_and_ranges(@notes, min: 1, max: 4000)) if @notes.present?
-    # TODO jrating
-    # TODO srlevel
+    # TODO parse multiple sran levels
+    scope = scope.where("jkwiki_charts.sran_level = ?", @srlevel) if @srlevel.present?
     scope = scope.where(timing: @timing) if @timing.present?
 
     @sorts.each do |sort|
