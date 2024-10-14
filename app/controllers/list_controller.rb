@@ -40,6 +40,7 @@ class ListController < ApplicationController
     scope = scope.where(level: Numbers.parse_nums_and_ranges(@level, min: 1, max: 50)) if @level.present?
     scope = scope.where(bpm_primary: Numbers.parse_nums_and_ranges(@bpm, min: 1, max: 1000)) if @bpm.present?
     scope = scope.where(bpm_primary_type: @bpmtype) if @bpmtype.present?
+    scope = scope.where(duration: Numbers.parse_nums_and_ranges(@duration, min: 0, max: 599)) if @duration.present?
     scope = scope.where(notes: Numbers.parse_nums_and_ranges(@notes, min: 1, max: 4000)) if @notes.present?
     # TODO parse multiple sran levels
     scope = scope.where("jkwiki_charts.sran_level = ?", @srlevel) if @srlevel.present?
@@ -162,6 +163,7 @@ class ListController < ApplicationController
     @diff = params[:diff].presence || params[:difficulty].presence
     @bpm = params[:bpm].presence
     @bpmtype = params[:bpmtype].presence
+    @duration = params[:duration].presence
     @notes = params[:notes].presence
     @srlevel = params[:srlevel].presence
     @timing = params[:timing].presence
