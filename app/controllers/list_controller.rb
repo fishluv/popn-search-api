@@ -42,6 +42,7 @@ class ListController < ApplicationController
     scope = scope.where(bpm_primary_type: @bpmtype) if @bpmtype.present?
     scope = scope.where(duration: Numbers.parse_nums_and_ranges(@duration, min: 0, max: 599)) if @duration.present?
     scope = scope.where(notes: Numbers.parse_nums_and_ranges(@notes, min: 1, max: 4000)) if @notes.present?
+    scope = scope.where(hold_notes: Numbers.parse_nums_and_ranges(@hnotes, min: 0, max: 1000)) if @hnotes.present?
     # TODO parse multiple sran levels
     scope = scope.where("jkwiki_charts.sran_level = ?", @srlevel) if @srlevel.present?
     scope = scope.where(timing: @timing) if @timing.present?
@@ -69,10 +70,10 @@ class ListController < ApplicationController
         scope = scope.order("bpm_primary #{"desc" if desc}")
       when "duration"
         scope = scope.order("duration #{"desc" if desc}")
-      when "hnotes"
-        scope = scope.order("hold_notes #{"desc" if desc}")
       when "notes"
         scope = scope.order("notes #{"desc" if desc}")
+      when "hnotes"
+        scope = scope.order("hold_notes #{"desc" if desc}")
       when "jrating"
         scope = scope.order("jkwiki_charts.rating_num #{"desc" if desc}")
       when "srlevel"
@@ -165,6 +166,7 @@ class ListController < ApplicationController
     @bpmtype = params[:bpmtype].presence
     @duration = params[:duration].presence
     @notes = params[:notes].presence
+    @hnotes = params[:hnotes].presence
     @srlevel = params[:srlevel].presence
     @timing = params[:timing].presence
   end
