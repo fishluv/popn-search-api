@@ -35,7 +35,7 @@ class Level
           .split("and")
           .map(&:strip)
           .select(&:present?)
-          .map { parse_num_or_range(_1) }
+          .map { parse_val_or_range(_1) }
           .compact
           .uniq
       end
@@ -46,8 +46,8 @@ class Level
     private
 
     # @return array of ints
-    def parse_num_or_range(num_or_range_str)
-      case num_or_range_str
+    def parse_val_or_range(val_or_range_str)
+      case val_or_range_str
       when /^(\d{1,2})$/
         (1..50).include?($1.to_i) ? [$1.to_i] : nil
       when /^(\d{1,2})-$/

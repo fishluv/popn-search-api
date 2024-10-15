@@ -37,14 +37,13 @@ class ListController < ApplicationController
     end
 
     scope = scope.where(difficulty: @diff) if @diff
-    scope = scope.where(level: Numbers.parse_nums_and_ranges(@level, min: 1, max: 50)) if @level.present?
-    scope = scope.where(bpm_primary: Numbers.parse_nums_and_ranges(@bpm, min: 1, max: 1000)) if @bpm.present?
+    scope = scope.where(level: Numbers.parse_vals_and_ranges(@level, min: 1, max: 50)) if @level.present?
+    scope = scope.where(bpm_primary: Numbers.parse_vals_and_ranges(@bpm, min: 1, max: 1000)) if @bpm.present?
     scope = scope.where(bpm_primary_type: @bpmtype) if @bpmtype.present?
-    scope = scope.where(duration: Numbers.parse_nums_and_ranges(@duration, min: 0, max: 599)) if @duration.present?
-    scope = scope.where(notes: Numbers.parse_nums_and_ranges(@notes, min: 1, max: 4000)) if @notes.present?
-    scope = scope.where(hold_notes: Numbers.parse_nums_and_ranges(@hnotes, min: 0, max: 1000)) if @hnotes.present?
-    # TODO parse multiple sran levels
-    scope = scope.where("jkwiki_charts.sran_level = ?", @srlevel) if @srlevel.present?
+    scope = scope.where(duration: Numbers.parse_vals_and_ranges(@duration, min: 0, max: 599)) if @duration.present?
+    scope = scope.where(notes: Numbers.parse_vals_and_ranges(@notes, min: 1, max: 4000)) if @notes.present?
+    scope = scope.where(hold_notes: Numbers.parse_vals_and_ranges(@hnotes, min: 0, max: 1000)) if @hnotes.present?
+    scope = scope.where("jkwiki_charts.sran_level" => SranLevel.parse_vals_and_ranges(@srlevel, min: "0", max: "20")) if @srlevel.present?
     scope = scope.where(timing: @timing) if @timing.present?
 
     @sorts.each do |sort|
