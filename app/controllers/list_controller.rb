@@ -21,12 +21,20 @@ class ListController < ApplicationController
 
   def charts
     parse_params
-    scope = Chart.joins(:song)
+    # Joining fts_charts for extra column (labels).
+    scope = Chart.joins("join fts_charts on charts.id = fts_charts.id").joins(:song)
     if (@sorts & ["jrating", "-jrating", "srlevel", "-srlevel"]).any? || @srlevel.present?
       scope = scope.joins(:jkwiki_chart)
     end
 
     scope = scope.where("songs.debut = ?", @debut) if @debut
+    scope = scope.where("songs.debut != 'cslively'") if @lively == "exclude"
+
+    if @omni == "only"
+      scope = scope.where("extra like '% omnimix% '")
+    elsif @omni == "exclude"
+      scope = scope.where("extra not like '% omnimix %'")
+    end
 
     if @folder
       if @folder == "cs" || @folder.to_i.positive?
@@ -83,7 +91,7 @@ class ListController < ApplicationController
 
     if @q
       token_string = Query.normalize(@q)
-      scope = scope.search(token_string)
+      scope = scope.search(token_string, join: false)
     end
 
     @pagy, @records = pagy(scope)
@@ -117,9 +125,9 @@ class ListController < ApplicationController
 
     # Note the space between the first % and omnimix.
     if @omni == "only"
-      scope = scope.where("extra like '% omnimix%'")
+      scope = scope.where("extra like '% omnimix %'")
     elsif @omni == "exclude"
-      scope = scope.where("extra not like '% omnimix%'")
+      scope = scope.where("extra not like '% omnimix %'")
     end
 
     @sorts.each do |sort|

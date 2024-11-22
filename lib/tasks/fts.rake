@@ -66,7 +66,7 @@ namespace :fts do
         get_folders_string(song),
         pad(norm_title_genre(song)),
         pad(norm_artist(song.artist)),
-        " " + song.labels.join(" "), # Opening space for searchability.
+        " " + song.labels.join(" ") + " ", # Surrounding spaces for searchability.
         song.charts.map { "#{norm_diff(_1.difficulty)} #{_1.level}" }.join(" "),
         song.character1&.disp_name, # Character _should_ always be present but just in case...
         song.character2&.disp_name, # Character _should_ always be present but just in case...
@@ -100,7 +100,7 @@ namespace :fts do
           get_folders_string(song),
           pad(norm_title_genre(song)),
           pad(norm_artist(song.artist)),
-          " " + (song.labels + chart.labels).join(" "), # Opening space for searchability.
+          " " + (song.labels + chart.labels).join(" ") + " ", # Surrounding spaces for searchability.
           pad(norm_diff(chart.difficulty)),
           pad(chart.level),
           pad(song.character1&.disp_name), # Character _should_ always be present but just in case...

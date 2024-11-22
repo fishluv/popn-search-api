@@ -30,7 +30,7 @@ class Chart < ApplicationRecord
   belongs_to :song
   belongs_to :jkwiki_chart, foreign_key: "jkwiki_page_path"
 
-  scope :search, ->(query) do
+  scope :search, ->(query, join: true) do
     weights = [
       0, # id
       0.5, # song_id
@@ -44,8 +44,10 @@ class Chart < ApplicationRecord
       1, # chara1_disp_name
       0.75, # charas_romantrans
     ]
-    self
-      .joins("join fts_charts on charts.id = fts_charts.id")
+
+    scope = self
+    scope = scope.joins("join fts_charts on charts.id = fts_charts.id") if join
+    scope
       .where("fts_charts match #{Fts.match_string(query, "level")}")
       .order(Arel.sql("bm25(fts_charts, #{weights.join(",")})"))
   end

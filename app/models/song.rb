@@ -57,7 +57,7 @@ class Song < ApplicationRecord
     ]
 
     scope = self
-    scope = scope.joins("inner join fts_songs on songs.id = fts_songs.id") if join
+    scope = scope.joins("join fts_songs on songs.id = fts_songs.id") if join
     scope
       .where("fts_songs match #{Fts.match_string(query, "diffs_levels")}")
       .order(Arel.sql("bm25(fts_songs, #{weights.join(",")})"))
