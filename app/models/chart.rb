@@ -12,6 +12,7 @@
 #  filename               :text
 #  folder                 :text
 #  force_new_chart_format :integer
+#  hardest                :integer          not null
 #  hold_notes             :integer
 #  jkwiki_page_path       :text
 #  level                  :integer          not null

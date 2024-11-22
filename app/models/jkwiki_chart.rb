@@ -8,7 +8,7 @@
 #  page_path  :text             primary key
 #  rating     :text
 #  rating_num :decimal(4, 3)
-#  sran_level :text
+#  sran_level :integer
 #  title      :text             not null
 #
 class JkwikiChart < ApplicationRecord
