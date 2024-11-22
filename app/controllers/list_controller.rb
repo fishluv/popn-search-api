@@ -96,8 +96,8 @@ class ListController < ApplicationController
 
   def songs
     parse_params
-    scope = Song
-    scope = scope.where(debut: @debut) if @debut
+    # This join is used for level and omni.
+    scope = Song.joins("inner join fts_songs on songs.id = fts_songs.id")
 
     if @folder
       if @folder == "cs" || @folder.to_i.positive?
@@ -109,10 +109,17 @@ class ListController < ApplicationController
 
     if @level
       where_clause = Level.to_songs_where_clause(@level)
-      if where_clause.present?
-        scope = scope.joins("inner join fts_songs on songs.id = fts_songs.id")
-                    .where(where_clause)
-      end
+      scope = scope.where(where_clause) if where_clause.present?
+    end
+
+    scope = scope.where(debut: @debut) if @debut
+    scope = scope.where("songs.debut != 'cslively'") if @lively == "exclude"
+
+    # Note the space between the first % and omnimix.
+    if @omni == "only"
+      scope = scope.where("extra like '% omnimix%'")
+    elsif @omni == "exclude"
+      scope = scope.where("extra not like '% omnimix%'")
     end
 
     @sorts.each do |sort|
@@ -137,8 +144,8 @@ class ListController < ApplicationController
 
     if @q
       token_string = Query.normalize(@q)
-      # This joins fts_songs. Don't join if we already joined for level above.
-      scope = scope.search(token_string, join: @level.blank?)
+      # Don't join since we already joined at the beginning.
+      scope = scope.search(token_string, join: false)
     end
 
     @pagy, @records = pagy(scope)
@@ -156,6 +163,8 @@ class ListController < ApplicationController
     @folder = params[:folder].presence
     @level = params[:level].presence
     @debut = params[:debut].presence
+    @omni = params[:omni].presence
+    @lively = params[:lively].presence
     @q = params[:q].presence
     @sorts = [params[:sort]].flatten.compact
     @sorts = ["title"] if @sorts.empty?
