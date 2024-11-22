@@ -36,7 +36,14 @@ class ListController < ApplicationController
       end
     end
 
-    scope = scope.where(difficulty: @diff) if @diff
+    if @diff
+      if @diff == "hardest"
+        scope = scope.where(hardest: true)
+      else
+        scope = scope.where(difficulty: @diff)
+      end
+    end
+
     scope = scope.where(level: Numbers.parse_vals_and_ranges(@level, min: 1, max: 50)) if @level.present?
     scope = scope.where(bpm_primary: Numbers.parse_vals_and_ranges(@bpm, min: 1, max: 1000)) if @bpm.present?
     scope = scope.where(bpm_primary_type: @bpmtype) if @bpmtype.present?
