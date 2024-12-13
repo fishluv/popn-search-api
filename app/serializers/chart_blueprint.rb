@@ -38,4 +38,20 @@ class ChartBlueprint < Blueprinter::Base
       SongBlueprint.render_as_hash(chart.song)
     end
   end
+
+  view :with_song_and_other_charts do
+    include_view :with_song
+
+    field :other_charts do |chart|
+      {
+        "e" => chart.song.charts.find { _1.difficulty == "e" },
+        "n" => chart.song.charts.find { _1.difficulty == "n" },
+        "h" => chart.song.charts.find { _1.difficulty == "h" },
+        "ex" => chart.song.charts.find { _1.difficulty == "ex" },
+      }
+        .compact
+        .except(chart.difficulty)
+        .transform_values { _1.slice(:difficulty, :level) }
+    end
+  end
 end

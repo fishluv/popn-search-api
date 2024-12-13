@@ -4,6 +4,6 @@ class FetchController < ApplicationController
     chart = song&.charts&.find { _1.difficulty == params[:diff] }
     raise ActiveRecord::RecordNotFound unless chart
 
-    render json: ChartBlueprint.render(chart, view: :with_song)
+    render json: ChartBlueprint.render(chart, view: :with_song_and_other_charts)
   end
 end
