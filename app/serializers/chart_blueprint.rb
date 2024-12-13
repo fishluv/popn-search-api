@@ -51,7 +51,7 @@ class ChartBlueprint < Blueprinter::Base
       }
         .compact
         .except(chart.difficulty)
-        .transform_values { _1.slice(:difficulty, :level) }
+        .transform_values { _1.level }
     end
   end
 end
