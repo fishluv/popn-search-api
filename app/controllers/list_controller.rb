@@ -47,8 +47,8 @@ class ListController < ApplicationController
     scope = scope.where(difficulty: @diff) if @diff
     scope = scope.where(hardest: true) if @hardest == "1"
     scope = scope.where(level: Numbers.parse_vals_and_ranges(@level, min: 1, max: 50)) if @level.present?
-    scope = scope.where(bpm_primary: Numbers.parse_vals_and_ranges(@bpm, min: 1, max: 1000)) if @bpm.present?
-    scope = scope.where(bpm_primary_type: @bpmtype) if @bpmtype.present?
+    scope = scope.where(bpm_main: Numbers.parse_vals_and_ranges(@bpm, min: 1, max: 1000)) if @bpm.present?
+    scope = scope.where(bpm_main_type: @bpmtype) if @bpmtype.present?
     scope = scope.where(duration: Numbers.parse_vals_and_ranges(@duration, min: 0, max: 599)) if @duration.present?
     scope = scope.where(notes: Numbers.parse_vals_and_ranges(@notes, min: 1, max: 4000)) if @notes.present?
     scope = scope.where(hold_notes: Numbers.parse_vals_and_ranges(@hnotes, min: 0, max: 1000)) if @hnotes.present?
@@ -75,7 +75,7 @@ class ListController < ApplicationController
       when "level"
         scope = scope.order("level #{"desc" if desc}")
       when "bpm"
-        scope = scope.order("bpm_primary #{"desc" if desc}")
+        scope = scope.order("bpm_main #{"desc" if desc}")
       when "duration"
         scope = scope.order("duration #{"desc" if desc}")
       when "notes"

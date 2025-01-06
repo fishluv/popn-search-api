@@ -5,11 +5,13 @@ class ChartBlueprint < Blueprinter::Base
     difficulty
     level
     bpm
-    bpm_primary
-    bpm_primary_type
+    bpm_main
+    bpm_main_type
     duration
     notes
     hold_notes
+    timesig_main
+    timesig_main_type
     timing
     jkwiki_page_path
     labels
@@ -17,6 +19,12 @@ class ChartBlueprint < Blueprinter::Base
 
   field :bpm_steps do |chart|
     chart.bpm_steps.split(",").map(&:to_i)
+  end
+
+  field :timesig_steps do |chart|
+    JSON.parse(chart.timesig_steps)
+  rescue
+    []
   end
 
   field :timing_steps do |chart|

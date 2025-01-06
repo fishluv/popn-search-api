@@ -4,8 +4,8 @@
 #
 #  id                     :text             primary key
 #  bpm                    :text
-#  bpm_primary            :integer
-#  bpm_primary_type       :text
+#  bpm_main               :integer
+#  bpm_main_type          :text
 #  bpm_steps              :text
 #  difficulty             :text             not null
 #  duration               :integer
@@ -17,6 +17,9 @@
 #  jkwiki_page_path       :text
 #  level                  :integer          not null
 #  notes                  :integer
+#  timesig_main           :text
+#  timesig_main_type      :text
+#  timesig_steps          :text
 #  timing                 :text
 #  timing_steps           :text
 #  song_id                :integer          not null
