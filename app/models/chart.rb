@@ -60,6 +60,6 @@ class Chart < ApplicationRecord
   end
 
   def to_s
-    "<Chart #{[song.remywiki_title, difficulty, level].compact.join(' ')}>"
+    "<Chart #{[song.r_title, difficulty, level].compact.join(' ')}>"
   end
 end

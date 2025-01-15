@@ -70,7 +70,7 @@ namespace :fts do
         song.charts.map { "#{norm_diff(_1.difficulty)} #{_1.level}" }.join(" "),
         song.character1&.disp_name, # Character _should_ always be present but just in case...
         song.character2&.disp_name, # Character _should_ always be present but just in case...
-        pad(norm_charas(song.remywiki_chara)),
+        pad(norm_charas(song.r_chara)),
       ]
       ApplicationRecord.connection.execute(
         <<~SQL
@@ -105,7 +105,7 @@ namespace :fts do
           pad(chart.level),
           pad(song.character1&.disp_name), # Character _should_ always be present but just in case...
           pad(song.character2&.disp_name), # Character _should_ always be present but just in case...
-          pad(norm_charas(song.remywiki_chara)),
+          pad(norm_charas(song.r_chara)),
         ]
           .map { ApplicationRecord.connection.quote _1 }
           .join(", ")
@@ -206,9 +206,9 @@ end
 def norm_title_genre(song)
   [
     song.title,
-    song.remywiki_title,
+    song.r_title,
     song.genre,
-    song.genre_romantrans,
+    song.r_genre,
   ]
     .map(&:downcase)
     .uniq
@@ -266,11 +266,11 @@ CHARA_DISP_NAME_TO_ROMANTRANS = {
   "小次郎" => "Kojirou",
 }.freeze
 
-def norm_charas(remywiki_chara)
-  if CHARA_DISP_NAME_TO_ROMANTRANS[remywiki_chara]
-    CHARA_DISP_NAME_TO_ROMANTRANS[remywiki_chara]
+def norm_charas(r_chara)
+  if CHARA_DISP_NAME_TO_ROMANTRANS[r_chara]
+    CHARA_DISP_NAME_TO_ROMANTRANS[r_chara]
   else
-    remywiki_chara.gsub("/", " ").downcase
+    r_chara.gsub("/", " ").downcase
   end
 end
 

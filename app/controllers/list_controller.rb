@@ -65,9 +65,9 @@ class ListController < ApplicationController
       when "genre"
         scope = scope.order("songs.fw_genre #{"desc" if desc}")
       when "rtitle"
-        scope = scope.order("songs.remywiki_title #{"desc" if desc}")
+        scope = scope.order("songs.r_title #{"desc" if desc}")
       when "rgenre"
-        scope = scope.order(Arel.sql("songs.genre_romantrans collate nocase #{"desc" if desc}"))
+        scope = scope.order(Arel.sql("songs.r_genre collate nocase #{"desc" if desc}"))
       when "debut"
         scope = scope.order(Arel.sql("#{DEBUT_ORDER_BY} #{"desc" if desc}"))
       when "id"
@@ -140,9 +140,9 @@ class ListController < ApplicationController
       when "genre"
         scope = scope.order("fw_genre #{"desc" if desc}")
       when "rtitle"
-        scope = scope.order("remywiki_title #{"desc" if desc}")
+        scope = scope.order("r_title #{"desc" if desc}")
       when "rgenre"
-        scope = scope.order(Arel.sql("genre_romantrans collate nocase #{"desc" if desc}"))
+        scope = scope.order(Arel.sql("r_genre collate nocase #{"desc" if desc}"))
       when "debut"
         scope = scope.order(Arel.sql("#{DEBUT_ORDER_BY} #{"desc" if desc}"))
       when "id"

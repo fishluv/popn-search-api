@@ -14,8 +14,9 @@
 #  fw_genre          :text             not null
 #  fw_title          :text             not null
 #  genre             :text             not null
-#  genre_romantrans  :text
-#  remywiki_chara    :text
+#  r_chara           :text
+#  r_genre           :text
+#  r_title           :text
 #  remywiki_title    :text
 #  remywiki_url_path :text
 #  slug              :text
@@ -84,7 +85,7 @@ class Song < ApplicationRecord
   end
 
   def to_s
-    display_genre = "[#{genre_romantrans}]" unless remywiki_title == genre_romantrans
-    "<Song #{[id, remywiki_title, display_genre, artist].compact.join(' ')}>"
+    display_genre = "[#{r_genre}]" unless r_title == r_genre
+    "<Song #{[id, r_title, display_genre, artist].compact.join(' ')}>"
   end
 end

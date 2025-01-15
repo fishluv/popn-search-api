@@ -7,20 +7,26 @@ class SongBlueprint < Blueprinter::Base
 
   fields(*%i[
     title
+    fw_title
+    r_title
     remywiki_title
     genre
-    genre_romantrans
+    fw_genre
+    r_genre
     artist
+    r_chara
     debut
     folders
     slug
     remywiki_url_path
-    remywiki_chara
     labels
   ])
 
+  # deprecated. remove soon.
   field :fw_title, name: :sort_title
   field :fw_genre, name: :sort_genre
+  field :r_genre, name: :genre_romantrans
+  field :r_chara, name: :remywiki_chara
 
   field :character1 do |song|
     render_if_present(song.character1, CharacterBlueprint)
