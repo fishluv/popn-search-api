@@ -223,7 +223,7 @@ ARTIST_ALIASES_AND_RELATED_NAMES = {
     /Mystic Moon/,
     /Zutt/,
   ] => %w[pon],
-  [/GeMiNioИ/] => %w[pon akhuta],
+  [/GeMiNioИ/] => %w[pon akhuta geminion],
   [
     /^colors$/,
     /Cuvelia/,
@@ -232,6 +232,7 @@ ARTIST_ALIASES_AND_RELATED_NAMES = {
   ] => ["dj taka"],
   [/iconoclasm/] => ["dj taka", "wac"],
   [/HuΣeR/] => ["humer"],
+  [/m@sumi/] => ["masumi"],
 }.freeze
 
 def norm_artist(artist)
